@@ -85,7 +85,7 @@ with tab2:
             st.code(f"{decimal_input}")
             st.code(f"= {sign_str}{mantissa:.2f} × 10^{exponent}")
         
-        st.markdown("**特殊値:**")
+        st.markdown("**サンプル値:**")
         col_a, col_b, col_c = st.columns(3)
         with col_a:
             if st.button("432"):
@@ -103,7 +103,6 @@ with tab2:
     with col2:
         try:
             packed = struct.pack('>f', decimal_input)
-            hex_repr = packed.hex().upper()
             binary_repr = ''.join(format(byte, '08b') for byte in packed)
             
             sign_bit = binary_repr[0]
@@ -112,19 +111,12 @@ with tab2:
             
             sign = int(sign_bit)
             exponent = int(exponent_bits, 2)
-            mantissa = int(mantissa_bits, 2)
             
-            st.code(f"16進数: 0x{hex_repr}")
-            st.code(f"2進数: {binary_repr}")
+            st.markdown("### 🔍 IEEE 754 構造")
             st.code(f"符号部: {sign_bit} ({'負' if sign else '正'})")
             st.code(f"指数部: {exponent_bits} ({exponent})")
             st.code(f"仮数部: {mantissa_bits[:12]}...")
             
-            if exponent != 0 and exponent != 255:
-                actual_exponent = exponent - 127
-                mantissa_value = 1 + mantissa / (2**23)
-                calculated = (-1)**sign * mantissa_value * (2**actual_exponent)
-                st.success(f"計算値: {calculated:.6f}")
         except:
             st.error("計算エラー")
 
@@ -155,9 +147,6 @@ with tab3:
             exponent = int(exponent_bits, 2)
             mantissa = int(mantissa_bits, 2)
             
-            hex_value = hex(int(binary_input, 2))[2:].upper().zfill(8)
-            
-            st.code(f"16進数: 0x{hex_value}")
             st.code(f"符号部: {sign_bit} ({'負' if sign else '正'})")
             st.code(f"指数部: {exponent_bits} ({exponent})")
             st.code(f"仮数部: {mantissa_bits[:12]}...")

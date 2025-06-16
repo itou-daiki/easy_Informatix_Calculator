@@ -85,40 +85,10 @@ with tab2:
             st.code(f"{decimal_input}")
             st.code(f"= {sign_str}{mantissa:.2f} × 10^{exponent}")
         
-        st.markdown("**サンプル値:**")
-        col_a, col_b, col_c = st.columns(3)
-        with col_a:
-            if st.button("432"):
-                st.session_state.decimal_input = 432
-                st.rerun()
-        with col_b:
-            if st.button("-432"):
-                st.session_state.decimal_input = -432
-                st.rerun()
-        with col_c:
-            if st.button("0.00123"):
-                st.session_state.decimal_input = 0.00123
-                st.rerun()
     
     with col2:
-        try:
-            packed = struct.pack('>f', decimal_input)
-            binary_repr = ''.join(format(byte, '08b') for byte in packed)
-            
-            sign_bit = binary_repr[0]
-            exponent_bits = binary_repr[1:9]
-            mantissa_bits = binary_repr[9:32]
-            
-            sign = int(sign_bit)
-            exponent = int(exponent_bits, 2)
-            
-            st.markdown("### 🔍 IEEE 754 構造")
-            st.code(f"符号部: {sign_bit} ({'負' if sign else '正'})")
-            st.code(f"指数部: {exponent_bits} ({exponent})")
-            st.code(f"仮数部: {mantissa_bits[:12]}...")
-            
-        except:
-            st.error("計算エラー")
+        # 右側は空のスペースまたは簡単な説明のみ
+        pass
 
 with tab3:
     st.subheader("💻 2進数から浮動小数点数")

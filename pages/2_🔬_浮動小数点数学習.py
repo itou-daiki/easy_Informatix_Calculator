@@ -1,5 +1,6 @@
 import streamlit as st
 import struct
+import math
 
 st.set_page_config(
     page_title="浮動小数点数学習",
@@ -61,15 +62,43 @@ with tab2:
     col1, col2 = st.columns(2)
     
     with col1:
-        decimal_input = st.number_input("浮動小数点数を入力", value=3.14, format="%.6f")
+        # セッション状態の初期化
+        if 'decimal_input' not in st.session_state:
+            st.session_state.decimal_input = 3.14
+        
+        decimal_input = st.number_input("浮動小数点数を入力", value=st.session_state.decimal_input, format="%.6f")
+        st.session_state.decimal_input = decimal_input
+        
+        # 指数表記の分解表示
+        if decimal_input != 0:
+            sign_str = "-" if decimal_input < 0 else ""
+            abs_val = abs(decimal_input)
+            
+            if abs_val >= 1:
+                exponent = int(math.floor(math.log10(abs_val)))
+                mantissa = abs_val / (10 ** exponent)
+            elif abs_val < 1:
+                exponent = int(math.floor(math.log10(abs_val)))
+                mantissa = abs_val / (10 ** exponent)
+            
+            st.markdown("### 📊 指数表記")
+            st.code(f"{decimal_input}")
+            st.code(f"= {sign_str}{mantissa:.2f} × 10^{exponent}")
         
         st.markdown("**特殊値:**")
-        if st.button("1.0"):
-            decimal_input = 1.0
-        if st.button("0.5"):  
-            decimal_input = 0.5
-        if st.button("-2.0"):
-            decimal_input = -2.0
+        col_a, col_b, col_c = st.columns(3)
+        with col_a:
+            if st.button("432"):
+                st.session_state.decimal_input = 432
+                st.rerun()
+        with col_b:
+            if st.button("-432"):
+                st.session_state.decimal_input = -432
+                st.rerun()
+        with col_c:
+            if st.button("0.00123"):
+                st.session_state.decimal_input = 0.00123
+                st.rerun()
     
     with col2:
         try:

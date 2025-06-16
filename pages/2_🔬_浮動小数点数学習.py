@@ -29,6 +29,185 @@ IEEE 754標準に基づいており、32ビット（単精度）と64ビット�
 
 st.markdown("---")
 
+# バイアス計算の詳細説明セクション
+st.subheader("🧮 バイアス計算の詳細")
+
+st.markdown("""
+### なぜバイアスが必要なのか？
+
+指数部8ビットで表現できる値は0～255ですが、実際の指数は負の値も必要です。
+そこで**バイアス値127**を使って、実際の指数を計算します。
+
+**計算式**: `実際の指数 = 指数部の値 - 127`
+""")
+
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    st.markdown("### 📊 指数部の範囲")
+    st.code("""
+指数部 (8ビット): 0 ～ 255
+
+特殊値:
+- 0: ゼロ・非正規化数
+- 1-254: 正規化数
+- 255: 無限大・NaN
+    """)
+
+with col2:
+    st.markdown("### ⚖️ バイアス適用")
+    st.code("""
+バイアス値: 127
+
+実際の指数の範囲:
+- 1-127 = -126 (最小)
+- 254-127 = +127 (最大)
+    """)
+
+with col3:
+    st.markdown("### 🎯 具体例")
+    
+    # インタラクティブなバイアス計算例
+    exponent_input = st.slider("指数部の値", 1, 254, 127)
+    actual_exponent = exponent_input - 127
+    
+    st.code(f"""
+指数部: {exponent_input}
+実際の指数: {exponent_input} - 127 = {actual_exponent}
+倍率: 2^{actual_exponent} = {2**actual_exponent:.6f}
+    """)
+
+st.markdown("---")
+
+# 手動計算練習セクション
+st.subheader("✏️ 手動計算練習")
+
+st.markdown("### 🔢 10進数から IEEE 754 形式への変換")
+
+practice_tab1, practice_tab2 = st.tabs(["ステップ学習", "自由練習"])
+
+with practice_tab1:
+    st.markdown("#### 例: 6.75 を IEEE 754 形式に変換")
+    
+    step_expander = st.expander("ステップ1: 符号部を決定", expanded=True)
+    with step_expander:
+        st.markdown("""
+        **6.75 は正の数なので:**
+        - 符号部 = 0 (正数)
+        """)
+        st.success("符号部: 0")
+    
+    step_expander = st.expander("ステップ2: 2進数に変換")
+    with step_expander:
+        st.markdown("""
+        **6.75 を2進数に変換:**
+        - 整数部分: 6 = 110₂
+        - 小数部分: 0.75 = 0.11₂ (0.5 + 0.25)
+        - 結果: 6.75 = 110.11₂
+        """)
+        st.success("2進数: 110.11")
+    
+    step_expander = st.expander("ステップ3: 正規化")
+    with step_expander:
+        st.markdown("""
+        **正規化 (1.xxxxx × 2^n の形式に変換):**
+        - 110.11₂ = 1.1011₂ × 2²
+        - 実際の指数: 2
+        """)
+        st.success("正規化: 1.1011 × 2²")
+    
+    step_expander = st.expander("ステップ4: 指数部を計算")
+    with step_expander:
+        st.markdown("""
+        **バイアス付き指数を計算:**
+        - 実際の指数: 2
+        - バイアス付き指数: 2 + 127 = 129
+        - 8ビット2進数: 129 = 10000001₂
+        """)
+        st.success("指数部: 10000001")
+    
+    step_expander = st.expander("ステップ5: 仮数部を決定")
+    with step_expander:
+        st.markdown("""
+        **仮数部 (小数部分のみ、23ビット):**
+        - 正規化後: 1.1011
+        - 小数部分: .1011
+        - 23ビットに拡張: 10110000000000000000000
+        """)
+        st.success("仮数部: 10110000000000000000000")
+    
+    step_expander = st.expander("ステップ6: 最終結果", expanded=True)
+    with step_expander:
+        st.markdown("""
+        **IEEE 754 形式での最終結果:**
+        """)
+        final_binary = "01000000110110000000000000000000"
+        final_hex = hex(int(final_binary, 2))[2:].upper()
+        
+        st.code(f"符号部: 0")
+        st.code(f"指数部: 10000001")
+        st.code(f"仮数部: 10110000000000000000000")
+        st.code(f"完全な2進数: {final_binary}")
+        st.code(f"16進数: 0x{final_hex}")
+        
+        # 検証
+        import struct
+        test_bytes = struct.pack('>I', int(final_binary, 2))
+        test_float = struct.unpack('>f', test_bytes)[0]
+        st.success(f"検証: {test_float} (元の値: 6.75)")
+
+with practice_tab2:
+    st.markdown("#### 自分で計算してみよう！")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        practice_number = st.number_input(
+            "変換したい数値を入力 (1.0 ～ 100.0)",
+            min_value=1.0,
+            max_value=100.0,
+            value=5.5,
+            step=0.25
+        )
+        
+        st.markdown("### 📝 計算手順")
+        st.markdown("""
+        1. **符号部**: 正数=0, 負数=1
+        2. **2進数変換**: 整数部と小数部を分けて変換
+        3. **正規化**: 1.xxxxx × 2^n の形式
+        4. **指数部**: 実際の指数 + 127
+        5. **仮数部**: 正規化後の小数部分を23ビット
+        """)
+        
+        if st.button("答えを表示"):
+            st.session_state.show_answer = True
+    
+    with col2:
+        if hasattr(st.session_state, 'show_answer') and st.session_state.show_answer:
+            st.markdown("### 📊 正解")
+            
+            # 実際の計算
+            packed = struct.pack('>f', practice_number)
+            binary_repr = ''.join(format(byte, '08b') for byte in packed)
+            hex_repr = packed.hex().upper()
+            
+            sign_bit = binary_repr[0]
+            exponent_bits = binary_repr[1:9]
+            mantissa_bits = binary_repr[9:32]
+            
+            exponent_value = int(exponent_bits, 2)
+            actual_exponent = exponent_value - 127
+            
+            st.code(f"元の数値: {practice_number}")
+            st.code(f"符号部: {sign_bit}")
+            st.code(f"指数部: {exponent_bits} ({exponent_value})")
+            st.code(f"実際の指数: {actual_exponent}")
+            st.code(f"仮数部: {mantissa_bits}")
+            st.code(f"完全な2進数: {binary_repr}")
+            st.code(f"16進数: 0x{hex_repr}")
+
+st.markdown("---")
+
 # 入力セクション
 st.subheader("🎯 実際に試してみよう！")
 
@@ -88,36 +267,101 @@ with tab1:
             st.code(f"指数部: {exponent_bits} (10進: {exponent})")
             st.code(f"仮数部: {mantissa_bits}")
             
-            # 値の計算過程
-            if exponent == 0 and mantissa == 0:
+# 値の計算過程を段階的に表示
+            st.markdown("### 🧮 計算過程")
+            
+            # ステップ1: 符号部の処理
+            with st.expander("ステップ1: 符号部の処理", expanded=True):
+                st.markdown(f"""
+                **符号ビット**: `{sign_bit}`
+                - 0 = 正の数
+                - 1 = 負の数
+                """)
                 if sign:
-                    st.info("値: -0.0 (負のゼロ)")
+                    st.code("符号: 負 (-)")
                 else:
-                    st.info("値: +0.0 (正のゼロ)")
-            elif exponent == 255:
-                if mantissa == 0:
-                    if sign:
-                        st.error("値: -∞ (負の無限大)")
-                    else:
-                        st.error("値: +∞ (正の無限大)")
-                else:
-                    st.error("値: NaN (非数)")
-            else:
+                    st.code("符号: 正 (+)")
+            
+            # ステップ2: 指数部の処理
+            with st.expander("ステップ2: 指数部の処理", expanded=True):
+                st.markdown(f"""
+                **指数部ビット**: `{exponent_bits}` = {exponent} (10進数)
+                
+                **バイアス計算**:
+                """)
+                
                 if exponent == 0:
-                    # 非正規化数
+                    st.code("指数部 = 0 → ゼロまたは非正規化数")
                     actual_exponent = -126
-                    mantissa_value = mantissa / (2**23)
-                    st.warning("非正規化数")
+                elif exponent == 255:
+                    st.code("指数部 = 255 → 無限大またはNaN")
+                    actual_exponent = None
                 else:
-                    # 正規化数
                     actual_exponent = exponent - 127
+                    st.code(f"実際の指数 = {exponent} - 127 = {actual_exponent}")
+                    st.code(f"指数の倍率 = 2^{actual_exponent} = {2**actual_exponent:.6f}")
+            
+            # ステップ3: 仮数部の処理
+            with st.expander("ステップ3: 仮数部の処理", expanded=True):
+                st.markdown(f"""
+                **仮数部ビット**: `{mantissa_bits}`
+                **10進値**: {mantissa}
+                """)
+                
+                if exponent == 0 and mantissa == 0:
+                    st.code("仮数部 = 0 → ゼロ")
+                    mantissa_value = 0
+                elif exponent == 0:
+                    mantissa_value = mantissa / (2**23)
+                    st.code(f"非正規化数: 仮数値 = {mantissa} ÷ 2^23 = {mantissa_value:.6f}")
+                    st.info("非正規化数では暗黙の1がありません")
+                elif exponent == 255:
+                    st.code("特殊値のため仮数値は計算不要")
+                    mantissa_value = None
+                else:
                     mantissa_value = 1 + mantissa / (2**23)
+                    fraction_part = mantissa / (2**23)
+                    st.code(f"仮数値 = 1 + ({mantissa} ÷ 2^23)")
+                    st.code(f"仮数値 = 1 + {fraction_part:.6f} = {mantissa_value:.6f}")
+                    st.info("正規化数では暗黙の1を追加します")
+            
+            # ステップ4: 最終値の計算
+            with st.expander("ステップ4: 最終値の計算", expanded=True):
+                st.markdown("""
+                **IEEE 754 計算式**: `(-1)^符号 × 仮数値 × 2^実際の指数`
+                """)
                 
-                calculated_value = (-1)**sign * mantissa_value * (2**actual_exponent)
-                
-                st.success(f"計算値: {calculated_value}")
-                st.info(f"実際の指数: {actual_exponent}")
-                st.info(f"仮数値: {mantissa_value:.6f}")
+                if exponent == 0 and mantissa == 0:
+                    if sign:
+                        st.success("最終値: -0.0 (負のゼロ)")
+                    else:
+                        st.success("最終値: +0.0 (正のゼロ)")
+                elif exponent == 255:
+                    if mantissa == 0:
+                        if sign:
+                            st.error("最終値: -∞ (負の無限大)")
+                        else:
+                            st.error("最終値: +∞ (正の無限大)")
+                    else:
+                        st.error("最終値: NaN (非数)")
+                else:
+                    if exponent == 0:
+                        st.warning("非正規化数")
+                        calculated_value = (-1)**sign * mantissa_value * (2**actual_exponent)
+                    else:
+                        calculated_value = (-1)**sign * mantissa_value * (2**actual_exponent)
+                    
+                    sign_str = "-" if sign else "+"
+                    st.code(f"最終値 = ({sign_str}1) × {mantissa_value:.6f} × 2^{actual_exponent}")
+                    st.code(f"最終値 = ({sign_str}1) × {mantissa_value:.6f} × {2**actual_exponent:.6f}")
+                    st.success(f"最終値: {calculated_value}")
+                    
+                    # 入力値との比較
+                    st.info(f"入力値: {decimal_input}")
+                    if abs(calculated_value - decimal_input) < 1e-6:
+                        st.success("✓ 計算が正確です！")
+                    else:
+                        st.warning(f"⚠️ 浮動小数点の精度限界により微小な誤差があります")
                 
         except Exception as e:
             st.error(f"エラー: {e}")

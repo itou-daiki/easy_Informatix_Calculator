@@ -57,38 +57,51 @@ with tab1:
     """)
 
 with tab2:
-    st.subheader("🔢 10進数から浮動小数点数")
+    st.subheader("🔢 10進数から指数表記")
     
-    col1, col2 = st.columns(2)
+    # 中央配置のため、空白列を使用
+    col1, col2, col3 = st.columns([1, 2, 1])
     
-    with col1:
-        # セッション状態の初期化
-        if 'decimal_input' not in st.session_state:
-            st.session_state.decimal_input = 3.14
+    with col2:
+        decimal_input = st.number_input("浮動小数点数を入力", value=3.14, format="%.6f")
         
-        decimal_input = st.number_input("浮動小数点数を入力", value=st.session_state.decimal_input, format="%.6f")
-        st.session_state.decimal_input = decimal_input
+        st.markdown("---")
         
         # 指数表記の分解表示
         if decimal_input != 0:
-            sign_str = "-" if decimal_input < 0 else ""
+            sign_str = "-" if decimal_input < 0 else "+"
             abs_val = abs(decimal_input)
             
+            # 指数計算（負の数にも対応）
             if abs_val >= 1:
                 exponent = int(math.floor(math.log10(abs_val)))
                 mantissa = abs_val / (10 ** exponent)
-            elif abs_val < 1:
+            else:  # 0 < abs_val < 1
                 exponent = int(math.floor(math.log10(abs_val)))
                 mantissa = abs_val / (10 ** exponent)
             
-            st.markdown("### 📊 指数表記")
-            st.code(f"{decimal_input}")
-            st.code(f"= {sign_str}{mantissa:.2f} × 10^{exponent}")
+            st.markdown("### 📊 指数表記への分解")
+            
+            # より見やすい表示
+            st.markdown(f"**元の数値:** `{decimal_input}`")
+            st.markdown(f"**符号:** `{sign_str}`")
+            st.markdown(f"**仮数:** `{mantissa:.3f}`")
+            st.markdown(f"**指数:** `{exponent}`")
+            
+            st.markdown("---")
+            
+            # 最終的な指数表記
+            if decimal_input < 0:
+                st.markdown(f"**指数表記:** `{decimal_input} = -{mantissa:.3f} × 10^{exponent}`")
+            else:
+                st.markdown(f"**指数表記:** `{decimal_input} = {mantissa:.3f} × 10^{exponent}`")
         
-    
-    with col2:
-        # 右側は空のスペースまたは簡単な説明のみ
-        pass
+        elif decimal_input == 0:
+            st.markdown("### 📊 ゼロの場合")
+            st.markdown("**ゼロは特別な値として扱われます**")
+        
+        else:
+            st.info("数値を入力してください")
 
 with tab3:
     st.subheader("💻 2進数から浮動小数点数")

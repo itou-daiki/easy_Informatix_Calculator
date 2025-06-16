@@ -52,19 +52,7 @@ with tab2:
         number = st.number_input("数値 (0-255)", 0, 255, 10)
         shift_type = st.selectbox("演算", ["左シフト (<<)", "右シフト (>>)"])
         
-        # シフト量をボタンで選択
-        st.markdown("**シフト量:**")
-        shift_cols = st.columns(7)
-        if 'shift_amount' not in st.session_state:
-            st.session_state.shift_amount = 1
-        
-        for i, col in enumerate(shift_cols):
-            with col:
-                if st.button(str(i+1), key=f"shift_{i+1}"):
-                    st.session_state.shift_amount = i + 1
-        
-        shift_amount = st.session_state.shift_amount
-        st.info(f"選択されたシフト量: {shift_amount}")
+        shift_amount = st.number_input("シフト量", 1, 7, 1)
     
     with col2:
         if shift_type == "左シフト (<<)":
@@ -107,19 +95,7 @@ with tab3:
         binary_num = st.number_input("数値 (0-255)", 0, 255, 10, key="bin")
         binary_shift_type = st.selectbox("演算", ["左シフト", "右シフト"], key="bin_type")
         
-        # 2進数タブでもボタンでシフト量選択
-        st.markdown("**シフト量:**")
-        binary_shift_cols = st.columns(7)
-        if 'binary_shift_amount' not in st.session_state:
-            st.session_state.binary_shift_amount = 1
-        
-        for i, col in enumerate(binary_shift_cols):
-            with col:
-                if st.button(str(i+1), key=f"bin_shift_{i+1}"):
-                    st.session_state.binary_shift_amount = i + 1
-        
-        binary_shift_amount = st.session_state.binary_shift_amount
-        st.info(f"選択されたシフト量: {binary_shift_amount}")
+        binary_shift_amount = st.number_input("シフト量", 1, 7, 1, key="bin_shift")
     
     with col2:
         if binary_shift_type == "左シフト":

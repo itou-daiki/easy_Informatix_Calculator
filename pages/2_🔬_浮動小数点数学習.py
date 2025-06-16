@@ -59,49 +59,45 @@ with tab1:
 with tab2:
     st.subheader("🔢 10進数から指数表記")
     
-    # 中央配置のため、空白列を使用
-    col1, col2, col3 = st.columns([1, 2, 1])
+    decimal_input = st.number_input("浮動小数点数を入力", value=3.14)
     
-    with col2:
-        decimal_input = st.number_input("浮動小数点数を入力", value=3.14)
+    st.markdown("---")
+    
+    # 指数表記の分解表示
+    if decimal_input != 0:
+        sign_str = "-" if decimal_input < 0 else "+"
+        abs_val = abs(decimal_input)
+        
+        # 指数計算（負の数にも対応）
+        if abs_val >= 1:
+            exponent = int(math.floor(math.log10(abs_val)))
+            mantissa = abs_val / (10 ** exponent)
+        else:  # 0 < abs_val < 1
+            exponent = int(math.floor(math.log10(abs_val)))
+            mantissa = abs_val / (10 ** exponent)
+        
+        st.markdown("### 📊 指数表記への分解")
+        
+        # より見やすい表示
+        st.markdown(f"**元の数値:** `{decimal_input}`")
+        st.markdown(f"**符号:** `{sign_str}`")
+        st.markdown(f"**仮数:** `{mantissa:.3f}`")
+        st.markdown(f"**指数:** `{exponent}`")
         
         st.markdown("---")
         
-        # 指数表記の分解表示
-        if decimal_input != 0:
-            sign_str = "-" if decimal_input < 0 else "+"
-            abs_val = abs(decimal_input)
-            
-            # 指数計算（負の数にも対応）
-            if abs_val >= 1:
-                exponent = int(math.floor(math.log10(abs_val)))
-                mantissa = abs_val / (10 ** exponent)
-            else:  # 0 < abs_val < 1
-                exponent = int(math.floor(math.log10(abs_val)))
-                mantissa = abs_val / (10 ** exponent)
-            
-            st.markdown("### 📊 指数表記への分解")
-            
-            # より見やすい表示
-            st.markdown(f"**元の数値:** `{decimal_input}`")
-            st.markdown(f"**符号:** `{sign_str}`")
-            st.markdown(f"**仮数:** `{mantissa:.3f}`")
-            st.markdown(f"**指数:** `{exponent}`")
-            
-            st.markdown("---")
-            
-            # 最終的な指数表記
-            if decimal_input < 0:
-                st.markdown(f"**指数表記:** `{decimal_input} = -{mantissa:.3f} × 10^{exponent}`")
-            else:
-                st.markdown(f"**指数表記:** `{decimal_input} = {mantissa:.3f} × 10^{exponent}`")
-        
-        elif decimal_input == 0:
-            st.markdown("### 📊 ゼロの場合")
-            st.markdown("**ゼロは特別な値として扱われます**")
-        
+        # 最終的な指数表記
+        if decimal_input < 0:
+            st.markdown(f"**指数表記:** `{decimal_input} = -{mantissa:.3f} × 10^{exponent}`")
         else:
-            st.info("数値を入力してください")
+            st.markdown(f"**指数表記:** `{decimal_input} = {mantissa:.3f} × 10^{exponent}`")
+    
+    elif decimal_input == 0:
+        st.markdown("### 📊 ゼロの場合")
+        st.markdown("**ゼロは特別な値として扱われます**")
+    
+    else:
+        st.info("数値を入力してください")
 
 with tab3:
     st.subheader("💻 2進数から浮動小数点数")

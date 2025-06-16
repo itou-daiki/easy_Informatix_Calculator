@@ -63,7 +63,7 @@ with tab2:
     col1, col2, col3 = st.columns([1, 2, 1])
     
     with col2:
-        decimal_input = st.number_input("浮動小数点数を入力", value=3.14, format="%.6f")
+        decimal_input = st.number_input("浮動小数点数を入力", value=3.14)
         
         st.markdown("---")
         

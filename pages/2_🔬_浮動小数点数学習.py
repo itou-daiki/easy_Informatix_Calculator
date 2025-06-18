@@ -219,7 +219,7 @@ def perform_step_conversion(value, is_binary=True, bit_format=32):
             return None, f"指数がサポート範囲外です ({biased_exponent})"
         
         bias_formula = "2^7-1" if bit_format == 32 else "2^10-1"
-        steps.append(("➂ 指数部", f"バイアスを使用して指数を変換\n\n{bit_format//8*4}精度浮動小数点数のバイアスは **{bias}** ← {bias_formula}で覚えるしか...\n\n実際の指数 **{exponent}** に{bias}を加えた **{biased_exponent}**（2進数で **{format(biased_exponent, f'0{exponent_bits}b')}**）が指数部に"))
+        steps.append(("➂ 指数部", f"バイアスを使用して指数を変換\n\n{bit_format//8*4}精度浮動小数点数のバイアスは **{bias}** ← {bias_formula}で覚えよう\n\n実際の指数 **{exponent}** に{bias}を加えた **{biased_exponent}**（2進数で **{format(biased_exponent, f'0{exponent_bits}b')}**）が指数部に"))
         
         # ステップ4: 仮数部
         if abs_decimal >= 1:

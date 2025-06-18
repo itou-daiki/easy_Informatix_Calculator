@@ -8,7 +8,7 @@ st.set_page_config(
 
 st.title("📊 シフト演算学習")
 
-tab1, tab2, tab3, tab4 = st.tabs(["📚 説明", "🔢 10進数", "💻 2進数", "🧩 練習問題"])
+tab1, tab2, tab3 = st.tabs(["📚 説明", "💻 2進数", "🧩 練習問題"])
 
 with tab1:
     st.subheader("🔄 シフト演算とは？")
@@ -44,49 +44,6 @@ with tab1:
     st.info("💡 シフト演算は通常の乗除算より高速です")
 
 with tab2:
-    st.subheader("🔢 10進数でシフト演算")
-    
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        number = st.number_input("数値 (0-255)", 0, 255, 10)
-        shift_type = st.selectbox("演算", ["左シフト (<<)", "右シフト (>>)"])
-        
-        shift_amount = st.number_input("シフト量", 1, 7, 1)
-    
-    with col2:
-        if shift_type == "左シフト (<<)":
-            result = number << shift_amount
-            calc = f"{number} × 2^{shift_amount} = {number} × {2**shift_amount} = {result}"
-        else:
-            result = number >> shift_amount
-            calc = f"{number} ÷ 2^{shift_amount} = {number} ÷ {2**shift_amount} = {result}"
-        
-        st.code(f"{number} {shift_type[3:5]} {shift_amount} = {result}")
-        st.success(f"計算: {calc}")
-    
-    # 複数例の表示
-    st.subheader("📊 計算例")
-    examples = []
-    test_numbers = [1, 2, 4, 8, 16, 32]
-    
-    for num in test_numbers:
-        if shift_type == "左シフト (<<)":
-            shifted = num << shift_amount
-            math_result = num * (2 ** shift_amount)
-        else:
-            shifted = num >> shift_amount
-            math_result = num // (2 ** shift_amount)
-        
-        examples.append({
-            "元の数値": num,
-            f"{shift_type} {shift_amount}": shifted,
-            "数学計算": math_result
-        })
-    
-    st.dataframe(examples, use_container_width=True)
-
-with tab3:
     st.subheader("💻 2進数でシフト演算")
     
     col1, col2 = st.columns(2)
@@ -141,7 +98,7 @@ with tab3:
                 bit_display_result += " "
         st.markdown(f"`{bit_display_result}`")
 
-with tab4:
+with tab3:
     st.subheader("🧩 練習問題")
     
     with st.expander("問題1: 左シフト", expanded=True):

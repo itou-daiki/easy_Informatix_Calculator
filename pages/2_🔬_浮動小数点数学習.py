@@ -307,38 +307,120 @@ with tab3:
                     st.info(f"**2進数表現:** `{binary_repr}`")
                     
                     # 基数変換の詳細表示
-                    with st.expander("🔍 基数変換の詳細", expanded=False):
+                    with st.expander("🔍 基数変換の詳細（位取り記数法）", expanded=False):
                         val = float(user_input)
                         integer_part = int(abs(val))
                         fractional_part = abs(val) - integer_part
                         
-                        st.markdown("**整数部の変換:**")
-                        if integer_part == 0:
-                            st.code("0 → 0")
+                        st.markdown("### 📊 位取り記数法による基数変換")
+                        st.markdown("**10進数を位取り記数法で分解:**")
+                        
+                        # 10進数の位取り記数法表現
+                        if val >= 1:
+                            digits = []
+                            positions = []
+                            temp = val
+                            position = 0
+                            
+                            # 整数部の位取り分解
+                            if integer_part > 0:
+                                temp_int = integer_part
+                                int_position = 0
+                                while temp_int > 0:
+                                    digit = temp_int % 10
+                                    digits.append(f"{digit} × 10^{int_position}")
+                                    temp_int //= 10
+                                    int_position += 1
+                            
+                            # 小数部の位取り分解
+                            if fractional_part > 0:
+                                temp_frac = fractional_part
+                                for i in range(1, 7):  # 小数点以下6桁まで
+                                    temp_frac *= 10
+                                    digit = int(temp_frac % 10)
+                                    if digit > 0:
+                                        digits.append(f"{digit} × 10^(-{i})")
+                                    temp_frac = temp_frac % 1
+                                    if temp_frac == 0:
+                                        break
+                            
+                            st.code(f"{val} = " + " + ".join(reversed(digits)))
                         else:
+                            # 1未満の場合
+                            temp_frac = fractional_part
+                            frac_digits = []
+                            for i in range(1, 10):
+                                temp_frac *= 10
+                                digit = int(temp_frac)
+                                if digit > 0:
+                                    frac_digits.append(f"{digit} × 10^(-{i})")
+                                temp_frac = temp_frac - digit
+                                if temp_frac == 0:
+                                    break
+                            st.code(f"{val} = " + " + ".join(frac_digits))
+                        
+                        st.markdown("---")
+                        st.markdown("**2進数への変換過程:**")
+                        
+                        # 整数部の2進変換
+                        st.markdown("**整数部の変換（位取り記数法）:**")
+                        if integer_part == 0:
+                            st.code("0₁₀ → 0₂")
+                        else:
+                            binary_int = bin(integer_part)[2:]
+                            # 2進数の位取り分解
+                            binary_terms = []
+                            for i, bit in enumerate(reversed(binary_int)):
+                                if bit == '1':
+                                    binary_terms.append(f"1 × 2^{i}")
+                            
+                            st.code(f"除算による変換:")
                             conversion_steps = []
                             temp = integer_part
                             while temp > 0:
                                 conversion_steps.append(f"{temp} ÷ 2 = {temp//2} 余り {temp%2}")
                                 temp = temp // 2
                             st.code("\n".join(conversion_steps))
+                            
+                            st.code(f"位取り記数法による確認:")
+                            st.code(f"{integer_part}₁₀ = " + " + ".join(reversed(binary_terms)) + f" = {binary_int}₂")
                         
-                        st.markdown("**小数部の変換:**")
+                        # 小数部の2進変換
+                        st.markdown("**小数部の変換（位取り記数法）:**")
                         if fractional_part == 0:
-                            st.code("0.0 → 0")
+                            st.code("0.0₁₀ → 0₂")
                         else:
+                            st.code("乗算による変換:")
                             conversion_steps = []
+                            binary_frac = ""
                             temp = fractional_part
+                            
                             for i in range(10):  # 最大10桁まで
                                 if temp == 0:
                                     break
                                 temp *= 2
                                 if temp >= 1:
-                                    conversion_steps.append(f"{temp-1:.6f} × 2 = {temp:.6f} → 1")
+                                    conversion_steps.append(f"{(temp-1):.6f} × 2 = {temp:.6f} → 1")
+                                    binary_frac += "1"
                                     temp -= 1
                                 else:
                                     conversion_steps.append(f"{temp:.6f} × 2 = {temp:.6f} → 0")
+                                    binary_frac += "0"
+                            
                             st.code("\n".join(conversion_steps))
+                            
+                            # 2進数の位取り分解
+                            st.code("位取り記数法による確認:")
+                            binary_terms = []
+                            for i, bit in enumerate(binary_frac):
+                                if bit == '1':
+                                    binary_terms.append(f"1 × 2^(-{i+1})")
+                            
+                            if binary_terms:
+                                st.code(f"{fractional_part:.6f}₁₀ ≈ " + " + ".join(binary_terms) + f" = 0.{binary_frac}₂")
+                        
+                        st.markdown("---")
+                        st.success(f"**最終結果:** {val}₁₀ = {binary_repr}₂")
                     
                     result, error = perform_step_conversion(user_input, False, bit_format)
             else:

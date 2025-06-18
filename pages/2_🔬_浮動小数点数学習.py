@@ -218,7 +218,7 @@ def perform_step_conversion(value, is_binary=True, bit_format=32):
         if biased_exponent < 0 or biased_exponent >= (2**exponent_bits - 1):
             return None, f"指数がサポート範囲外です ({biased_exponent})"
         
-        bias_formula = "2^7-1" if bit_format == 32 else "2^10-1"
+        bias_formula = "2⁷-1" if bit_format == 32 else "2¹⁰-1"
         steps.append(("➂ 指数部", f"バイアスを使用して指数を変換\n\n{bit_format//8*4}精度浮動小数点数のバイアスは **{bias}** ← {bias_formula}で覚えよう\n\n実際の指数 **{exponent}** に{bias}を加えた **{biased_exponent}**（2進数で **{format(biased_exponent, f'0{exponent_bits}b')}**）が指数部に"))
         
         # ステップ4: 仮数部
@@ -331,7 +331,7 @@ with tab3:
                         for i, digit in enumerate(reversed(int_part_str)):
                             if int(digit) > 0:  # 0でない桁のみ表示
                                 decimal_table_data.append({
-                                    "位": f"10^{i}",
+                                    "位": f"10{chr(8304+i) if i < 10 else f'^{i}'}",
                                     "位の値": f"{10**i}",
                                     "桁の値": digit,
                                     "計算": f"{digit} × {10**i}",
@@ -342,8 +342,11 @@ with tab3:
                         for i, digit in enumerate(frac_part_str):
                             if int(digit) > 0:  # 0でない桁のみ表示
                                 pos = -(i+1)
+                                # 負の指数用上付き文字
+                                superscript_map = {'-': '⁻', '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹'}
+                                pos_super = ''.join(superscript_map.get(c, c) for c in str(pos))
                                 decimal_table_data.append({
-                                    "位": f"10^({pos})",
+                                    "位": f"10{pos_super}",
                                     "位の値": f"{10**pos:.7f}".rstrip('0'),
                                     "桁の値": digit,
                                     "計算": f"{digit} × {10**pos:.7f}".rstrip('0'),
@@ -381,11 +384,15 @@ with tab3:
                         # 2進数位取り表の作成
                         binary_table_data = []
                         
+                        # 上付き文字マッピング
+                        superscript_map = {'-': '⁻', '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹'}
+                        
                         # 整数部（右から左へ）
                         for i, bit in enumerate(reversed(binary_int)):
                             if bit == '1':  # 1のビットのみ表示
+                                i_super = ''.join(superscript_map.get(c, c) for c in str(i))
                                 binary_table_data.append({
-                                    "位": f"2^{i}",
+                                    "位": f"2{i_super}",
                                     "位の値": f"{2**i}",
                                     "ビット": bit,
                                     "計算": f"{bit} × {2**i}",
@@ -396,8 +403,9 @@ with tab3:
                         for i, bit in enumerate(binary_frac):
                             if bit == '1':  # 1のビットのみ表示
                                 pos = -(i+1)
+                                pos_super = ''.join(superscript_map.get(c, c) for c in str(pos))
                                 binary_table_data.append({
-                                    "位": f"2^({pos})",
+                                    "位": f"2{pos_super}",
                                     "位の値": f"{2**pos:.7f}".rstrip('0'),
                                     "ビット": bit,
                                     "計算": f"{bit} × {2**pos:.7f}".rstrip('0'),

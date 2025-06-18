@@ -100,8 +100,10 @@ with tab3:
     with col2:
         if binary_shift_type == "左シフト":
             binary_result = binary_num << binary_shift_amount
+            operation_symbol = "<<"
         else:
             binary_result = binary_num >> binary_shift_amount
+            operation_symbol = ">>"
         
         st.markdown("**計算結果:**")
         st.code(f"{binary_num} {operation_symbol} {binary_shift_amount} = {binary_result}")

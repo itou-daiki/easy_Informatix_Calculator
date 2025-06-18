@@ -89,19 +89,23 @@ with tab2:
     # ステップ2: シフト演算の実行
     st.markdown(f"### ステップ2: {binary_shift_type}を{binary_shift_amount}ビット実行")
     
+    # 上付き文字マッピング
+    superscript_map = {'0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹'}
+    shift_super = ''.join(superscript_map.get(c, c) for c in str(binary_shift_amount))
+    
     if binary_shift_type == "左シフト":
         st.markdown(f"""
-        **左シフト (<<)** は、すべてのビットを左に移動させます：
-        - 右側の空いた部分は **0** で埋めます
-        - 左端からはみ出したビットは **消失** します
-        - 数学的効果: **元の値 × 2^{binary_shift_amount} = {binary_num} × {2**binary_shift_amount} = {binary_result}**
+        **左シフト (<<)** は、すべてのビットを :blue[**左に移動**] させます：
+        - 右側の空いた部分は :green[**0**] で埋めます
+        - 左端からはみ出したビットは :red[**消失**] します
+        - 数学的効果: **元の値 × 2{shift_super} = {binary_num} × {2**binary_shift_amount} = {binary_result}**
         """)
     else:
         st.markdown(f"""
-        **右シフト (>>)** は、すべてのビットを右に移動させます：
-        - 左側の空いた部分は **0** で埋めます
-        - 右端からはみ出したビットは **消失** します
-        - 数学的効果: **元の値 ÷ 2^{binary_shift_amount} = {binary_num} ÷ {2**binary_shift_amount} = {binary_result}**
+        **右シフト (>>)** は、すべてのビットを :blue[**右に移動**] させます：
+        - 左側の空いた部分は :green[**0**] で埋めます
+        - 右端からはみ出したビットは :red[**消失**] します
+        - 数学的効果: **元の値 ÷ 2{shift_super} = {binary_num} ÷ {2**binary_shift_amount} = {binary_result}**
         """)
     
     # ステップ3: ビット移動の可視化（データフレーム）
@@ -140,7 +144,24 @@ with tab2:
         "10進数": f"{binary_result}"
     })
     
-    st.dataframe(bit_comparison_data, use_container_width=True)
+    # データフレームにスタイリングを適用
+    import pandas as pd
+    df = pd.DataFrame(bit_comparison_data)
+    
+    # ビット位置に応じてセルに色を付ける関数
+    def highlight_bits(val):
+        if val == '1':
+            return 'background-color: #90EE90'  # 薄い緑
+        elif val == '0':
+            return 'background-color: #FFB6C1'  # 薄いピンク
+        else:
+            return ''
+    
+    # ビット列のみにスタイリングを適用
+    bit_columns = ['ビット7', 'ビット6', 'ビット5', 'ビット4', 'ビット3', 'ビット2', 'ビット1', 'ビット0']
+    styled_df = df.style.applymap(highlight_bits, subset=bit_columns)
+    
+    st.dataframe(styled_df, use_container_width=True)
     
     # ステップ4: 結果の確認
     st.markdown("### ステップ4: 結果の確認")

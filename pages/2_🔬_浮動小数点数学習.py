@@ -99,54 +99,262 @@ with tab2:
     else:
         st.info("数値を入力してください")
 
-with tab3:
-    st.subheader("💻 2進数から浮動小数点数")
+def decimal_to_binary_fraction(decimal_val, precision=23):
+    """10進数を2進小数に変換"""
+    if decimal_val == 0:
+        return "0.0"
     
-    col1, col2 = st.columns(2)
+    integer_part = int(abs(decimal_val))
+    fractional_part = abs(decimal_val) - integer_part
+    
+    # 整数部の2進変換
+    if integer_part == 0:
+        binary_int = "0"
+    else:
+        binary_int = bin(integer_part)[2:]
+    
+    # 小数部の2進変換
+    binary_frac = ""
+    count = 0
+    while fractional_part > 0 and count < precision:
+        fractional_part *= 2
+        if fractional_part >= 1:
+            binary_frac += "1"
+            fractional_part -= 1
+        else:
+            binary_frac += "0"
+        count += 1
+    
+    return f"{binary_int}.{binary_frac}"
+
+def perform_step_conversion(value, is_binary=True, bit_format=32):
+    """ステップバイステップで浮動小数点数に変換"""
+    steps = []
+    
+    try:
+        if is_binary:
+            if '.' not in value:
+                return None, "小数点を含む2進数を入力してください"
+            binary_str = value
+            # 2進数を10進数に変換
+            decimal_val = 0
+            parts = value.split('.')
+            integer_part = parts[0]
+            fractional_part = parts[1] if len(parts) > 1 else ""
+            
+            # 整数部
+            for i, bit in enumerate(reversed(integer_part)):
+                if bit == '1':
+                    decimal_val += 2**i
+            
+            # 小数部
+            for i, bit in enumerate(fractional_part):
+                if bit == '1':
+                    decimal_val += 2**(-(i+1))
+        else:
+            decimal_val = float(value)
+            binary_str = decimal_to_binary_fraction(decimal_val)
+        
+        if decimal_val == 0:
+            return None, "ゼロの場合は特別な表現になります"
+        
+        # ステップ1: 符号部
+        sign_bit = 0 if decimal_val >= 0 else 1
+        steps.append(("➀ 符号部", f"数値は{'正' if sign_bit == 0 else '負'}なので、符号ビットは **{sign_bit}** です。"))
+        
+        abs_decimal = abs(decimal_val)
+        
+        # ステップ2: 正規化
+        if abs_decimal >= 1:
+            # 1以上の場合
+            binary_parts = binary_str.split('.')
+            integer_part = binary_parts[0]
+            fractional_part = binary_parts[1] if len(binary_parts) > 1 else ""
+            
+            # 最初の1を見つける
+            first_one_pos = integer_part.find('1')
+            if first_one_pos == -1:
+                return None, "有効な数値ではありません"
+            
+            # 正規化
+            exponent = len(integer_part) - first_one_pos - 1
+            normalized_mantissa = integer_part[first_one_pos+1:] + fractional_part
+            
+            steps.append(("➁ 正規化", f"**元の数値:** `{binary_str}`\n\n**右シフト:** 小数点を{exponent}桁左に移動\n\n**正規化結果:** `1.{normalized_mantissa} × 2^{exponent}`"))
+            
+        else:
+            # 1未満の場合
+            if '.' not in binary_str:
+                return None, "無効な2進数形式です"
+            
+            fractional_part = binary_str.split('.')[1]
+            
+            # 最初の1を見つける
+            first_one_pos = -1
+            for i, bit in enumerate(fractional_part):
+                if bit == '1':
+                    first_one_pos = i + 1
+                    break
+            
+            if first_one_pos == -1:
+                return None, "有効な2進小数ではありません"
+            
+            exponent = -first_one_pos
+            normalized_mantissa = fractional_part[first_one_pos-1:]
+            
+            steps.append(("➁ 正規化", f"**元の数値:** `{binary_str}`\n\n**左シフト:** 小数点を{first_one_pos}桁右に移動\n\n**正規化結果:** `1.{normalized_mantissa[1:]} × 2^({exponent})`"))
+        
+        # ステップ3: 指数部
+        bias = 127 if bit_format == 32 else 1023
+        exponent_bits = 8 if bit_format == 32 else 11
+        mantissa_bits = 23 if bit_format == 32 else 52
+        
+        biased_exponent = exponent + bias
+        
+        if biased_exponent < 0 or biased_exponent >= (2**exponent_bits - 1):
+            return None, f"指数がサポート範囲外です ({biased_exponent})"
+        
+        steps.append(("➂ 指数部", f"{bit_format}bit浮動小数点数のバイアスは **{bias}** です\n\n実際の指数 **{exponent}** に{bias}を加えると: {exponent} + {bias} = **{biased_exponent}**\n\n2進数表現: **{format(biased_exponent, f'0{exponent_bits}b')}**"))
+        
+        # ステップ4: 仮数部
+        if abs_decimal >= 1:
+            mantissa_fraction = normalized_mantissa
+        else:
+            mantissa_fraction = normalized_mantissa[1:] if len(normalized_mantissa) > 1 else ""
+        
+        mantissa_padded = (mantissa_fraction + "0" * mantissa_bits)[:mantissa_bits]
+        
+        steps.append(("④ 仮数部", f"正規化した数の小数部分は **`{mantissa_fraction}`**\n\n仮数部は{mantissa_bits}ビット、残りのビットは0で埋めます\n\n仮数部: **`{mantissa_padded}`**"))
+        
+        # 最終結果
+        final_binary = f"{sign_bit} {format(biased_exponent, f'0{exponent_bits}b')} {mantissa_padded}"
+        
+        # 検証
+        try:
+            if bit_format == 32:
+                binary_int = str(sign_bit) + format(biased_exponent, '08b') + mantissa_padded
+                bytes_data = struct.pack('>I', int(binary_int, 2))
+                float_value = struct.unpack('>f', bytes_data)[0]
+            else:
+                binary_int = str(sign_bit) + format(biased_exponent, '011b') + mantissa_padded
+                bytes_data = struct.pack('>Q', int(binary_int, 2))
+                float_value = struct.unpack('>d', bytes_data)[0]
+            
+            verification = {
+                'original': decimal_val,
+                'converted': float_value,
+                'error': abs(decimal_val - float_value)
+            }
+        except:
+            verification = None
+        
+        return {
+            'steps': steps,
+            'final_binary': final_binary,
+            'verification': verification,
+            'binary_representation': binary_str if is_binary else binary_str
+        }, None
+        
+    except Exception as e:
+        return None, f"エラー: {str(e)}"
+
+with tab3:
+    st.subheader("💻 実数から浮動小数点数への変換")
+    
+    # 設定部分
+    col1, col2 = st.columns([2, 1])
     
     with col1:
-        binary_input = st.text_input(
-            "32ビット2進数を入力",
-            value="01000000010010010000111111011011",
-            max_chars=32
-        )
-        
-        if len(binary_input) != 32:
-            st.error("32ビットで入力してください")
-        elif not all(c in '01' for c in binary_input):
-            st.error("0と1のみで入力してください")
+        input_type = st.radio("入力形式を選択", ["10進数", "2進数"], horizontal=True)
     
     with col2:
-        if len(binary_input) == 32 and all(c in '01' for c in binary_input):
-            sign_bit = binary_input[0]
-            exponent_bits = binary_input[1:9]
-            mantissa_bits = binary_input[9:32]
-            
-            sign = int(sign_bit)
-            exponent = int(exponent_bits, 2)
-            mantissa = int(mantissa_bits, 2)
-            
-            st.code(f"符号部: {sign_bit} ({'負' if sign else '正'})")
-            st.code(f"指数部: {exponent_bits} ({exponent})")
-            st.code(f"仮数部: {mantissa_bits[:12]}...")
-            
-            try:
-                bytes_data = struct.pack('>I', int(binary_input, 2))
-                float_value = struct.unpack('>f', bytes_data)[0]
-                st.success(f"浮動小数点値: {float_value}")
-                
-                if exponent != 0 and exponent != 255:
-                    actual_exp = exponent - 127
-                    st.info(f"実際の指数: {actual_exp}")
-            except:
-                st.error("変換エラー")
+        bit_format = st.selectbox("ビット形式", [32, 64], format_func=lambda x: f"{x}bit")
     
-    # バイアス計算の例
-    st.subheader("⚖️ バイアス計算")
-    exponent_demo = st.slider("指数部の値", 1, 254, 127)
-    actual_exponent = exponent_demo - 127
-    st.code(f"指数部: {exponent_demo} → 実際の指数: {exponent_demo} - 127 = {actual_exponent}")
-    st.code(f"倍率: 2^{actual_exponent} = {2**actual_exponent:.6f}")
+    st.markdown("---")
+    
+    # 入力部分
+    if input_type == "10進数":
+        user_input = st.text_input(
+            "10進数を入力してください (例: 0.8125, 3.14)",
+            value="0.8125",
+            help="正の小数または整数を入力"
+        )
+        is_binary_input = False
+    else:
+        user_input = st.text_input(
+            "2進数を入力してください (例: 0.1101, 11.01)",
+            value="0.1101",
+            help="2進数の実数を入力（整数部.小数部の形式）"
+        )
+        is_binary_input = True
+    
+    # 変換処理
+    if user_input:
+        try:
+            if input_type == "10進数":
+                # 入力検証
+                float(user_input)
+                if float(user_input) < 0:
+                    st.warning("現在は正の数のみサポートしています")
+                else:
+                    # 10進数から2進数への変換を表示
+                    binary_repr = decimal_to_binary_fraction(float(user_input))
+                    st.info(f"**2進数表現:** `{binary_repr}`")
+                    
+                    result, error = perform_step_conversion(user_input, False, bit_format)
+            else:
+                # 2進数入力の検証
+                if not all(c in '01.' for c in user_input) or user_input.count('.') != 1:
+                    st.error("有効な2進数形式で入力してください（例: 0.1101）")
+                else:
+                    result, error = perform_step_conversion(user_input, True, bit_format)
+            
+            if error:
+                st.error(error)
+            elif result:
+                st.markdown("---")
+                
+                # ステップ表示
+                for step_title, step_content in result['steps']:
+                    st.markdown(f"### {step_title}")
+                    st.markdown(step_content)
+                    st.markdown("")
+                
+                # 最終結果
+                st.markdown("### 🎯 最終結果")
+                st.success(f"**IEEE 754 ({bit_format}bit)形式:** `{result['final_binary']}`")
+                
+                # 検証
+                if result['verification']:
+                    st.markdown("### ✅ 検証")
+                    v = result['verification']
+                    st.info(f"元の値: {v['original']:.10f}")
+                    st.info(f"変換後の値: {v['converted']:.10f}")
+                    st.info(f"誤差: {v['error']:.2e}")
+                
+        except ValueError:
+            st.error("有効な数値を入力してください")
+        except Exception as e:
+            st.error(f"処理エラー: {str(e)}")
+    
+    # 参考情報
+    st.markdown("---")
+    st.subheader("📋 ビット構成")
+    
+    if bit_format == 32:
+        st.markdown("""
+        **32bit (単精度):**
+        - 符号部: 1ビット
+        - 指数部: 8ビット (バイアス: 127)
+        - 仮数部: 23ビット
+        """)
+    else:
+        st.markdown("""
+        **64bit (倍精度):**
+        - 符号部: 1ビット  
+        - 指数部: 11ビット (バイアス: 1023)
+        - 仮数部: 52ビット
+        """)
 
 with tab4:
     st.subheader("🧩 練習問題")

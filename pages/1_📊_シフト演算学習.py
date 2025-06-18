@@ -103,10 +103,15 @@ with tab3:
         else:
             binary_result = binary_num >> binary_shift_amount
         
-        st.code(f"元の数値: {binary_num}")
-        st.code(f"2進数: {format(binary_num, '08b')}")
-        st.code(f"結果: {binary_result}")
-        st.code(f"2進数: {format(binary_result, '08b')}")
+        st.markdown("**計算結果:**")
+        st.code(f"{binary_num} {operation_symbol} {binary_shift_amount} = {binary_result}")
+        st.code(f"2進数: {format(binary_num, '08b')} → {format(binary_result, '08b')}")
+        
+        # 浮動小数点数での応用説明
+        if binary_shift_type == "左シフト":
+            st.info(f"💡 浮動小数点数では、正規化時に同じ左シフトの原理を使用します")
+        else:
+            st.info(f"💡 浮動小数点数では、非正規化数の処理で右シフトが使われることがあります")
     
     # ビット移動の視覚化
     st.subheader("🔍 ビット移動の可視化")

@@ -158,9 +158,13 @@ def perform_step_conversion(value, is_binary=True, bit_format=32):
         if decimal_val == 0:
             return None, "ゼロの場合は特別な表現になります"
         
+        # ステップ0: 基数変換（10進数入力の場合のみ）
+        if not is_binary:
+            steps.append(("⓪ 基数変換", f"**10進数:** `{decimal_val}`\n\n**2進数変換過程:**\n\n整数部: `{int(abs(decimal_val))}` → `{bin(int(abs(decimal_val)))[2:] if int(abs(decimal_val)) > 0 else '0'}`\n\n小数部: `{abs(decimal_val) - int(abs(decimal_val)):.10f}` → 小数部×2を繰り返し計算\n\n**結果:** `({decimal_val})₁₀` → `({binary_str})₂`"))
+        
         # ステップ1: 符号部
         sign_bit = 0 if decimal_val >= 0 else 1
-        steps.append(("➀ 符号部", f"数値は{'正' if sign_bit == 0 else '負'}なので、符号ビットは **{sign_bit}** です。"))
+        steps.append(("➀ 符号部", f"この数値は{'正' if sign_bit == 0 else '負'}なので、符号ビットは **「{sign_bit}」** です。"))
         
         abs_decimal = abs(decimal_val)
         
@@ -180,7 +184,7 @@ def perform_step_conversion(value, is_binary=True, bit_format=32):
             exponent = len(integer_part) - first_one_pos - 1
             normalized_mantissa = integer_part[first_one_pos+1:] + fractional_part
             
-            steps.append(("➁ 正規化", f"**元の数値:** `{binary_str}`\n\n**右シフト:** 小数点を{exponent}桁左に移動\n\n**正規化結果:** `1.{normalized_mantissa} × 2^{exponent}`"))
+            steps.append(("➁ 正規化", f"数値を **1.xxxxx** の形に変換\n\n**「{binary_str}」** を右にシフトして **「1.{normalized_mantissa} × 2^{exponent}」** にします。"))
             
         else:
             # 1未満の場合
@@ -202,7 +206,7 @@ def perform_step_conversion(value, is_binary=True, bit_format=32):
             exponent = -first_one_pos
             normalized_mantissa = fractional_part[first_one_pos-1:]
             
-            steps.append(("➁ 正規化", f"**元の数値:** `{binary_str}`\n\n**左シフト:** 小数点を{first_one_pos}桁右に移動\n\n**正規化結果:** `1.{normalized_mantissa[1:]} × 2^({exponent})`"))
+            steps.append(("➁ 正規化", f"数値を **1.xxxxx** の形に変換\n\n**「{binary_str}」** を左にシフトして **「1.{normalized_mantissa[1:]} × 2^{exponent}」** にします。"))
         
         # ステップ3: 指数部
         bias = 127 if bit_format == 32 else 1023
@@ -214,7 +218,8 @@ def perform_step_conversion(value, is_binary=True, bit_format=32):
         if biased_exponent < 0 or biased_exponent >= (2**exponent_bits - 1):
             return None, f"指数がサポート範囲外です ({biased_exponent})"
         
-        steps.append(("➂ 指数部", f"{bit_format}bit浮動小数点数のバイアスは **{bias}** です\n\n実際の指数 **{exponent}** に{bias}を加えると: {exponent} + {bias} = **{biased_exponent}**\n\n2進数表現: **{format(biased_exponent, f'0{exponent_bits}b')}**"))
+        bias_formula = "2^7-1" if bit_format == 32 else "2^10-1"
+        steps.append(("➂ 指数部", f"バイアスを使用して指数を変換\n\n{bit_format//8*4}精度浮動小数点数のバイアスは **{bias}** ← {bias_formula}で覚えるしか...\n\n実際の指数 **{exponent}** に{bias}を加えた **{biased_exponent}**（2進数で **{format(biased_exponent, f'0{exponent_bits}b')}**）が指数部に"))
         
         # ステップ4: 仮数部
         if abs_decimal >= 1:
@@ -224,7 +229,7 @@ def perform_step_conversion(value, is_binary=True, bit_format=32):
         
         mantissa_padded = (mantissa_fraction + "0" * mantissa_bits)[:mantissa_bits]
         
-        steps.append(("④ 仮数部", f"正規化した数の小数部分は **`{mantissa_fraction}`**\n\n仮数部は{mantissa_bits}ビット、残りのビットは0で埋めます\n\n仮数部: **`{mantissa_padded}`**"))
+        steps.append(("④ 仮数部", f"正規化した数の小数部分を取る\n\n**1.{mantissa_fraction}** の小数部分は **{mantissa_fraction}** 　仮数部は{mantissa_bits}ビット　残りのビットは0で埋める"))
         
         # 最終結果
         final_binary = f"{sign_bit} {format(biased_exponent, f'0{exponent_bits}b')} {mantissa_padded}"
@@ -275,15 +280,15 @@ with tab3:
     # 入力部分
     if input_type == "10進数":
         user_input = st.text_input(
-            "10進数を入力してください (例: 0.8125, 3.14)",
-            value="0.8125",
+            "10進数を入力してください (例: 0.1015625, 3.14)",
+            value="0.1015625",
             help="正の小数または整数を入力"
         )
         is_binary_input = False
     else:
         user_input = st.text_input(
-            "2進数を入力してください (例: 0.1101, 11.01)",
-            value="0.1101",
+            "2進数を入力してください (例: 0.0001101, 11.01)",
+            value="0.0001101",
             help="2進数の実数を入力（整数部.小数部の形式）"
         )
         is_binary_input = True
@@ -295,11 +300,45 @@ with tab3:
                 # 入力検証
                 float(user_input)
                 if float(user_input) < 0:
-                    st.warning("現在は正の数のみサポートしています")
+                    st.warning("現在は正の数のみサポートしています（負の数は符号ビットを1にするだけです）")
                 else:
                     # 10進数から2進数への変換を表示
                     binary_repr = decimal_to_binary_fraction(float(user_input))
                     st.info(f"**2進数表現:** `{binary_repr}`")
+                    
+                    # 基数変換の詳細表示
+                    with st.expander("🔍 基数変換の詳細", expanded=False):
+                        val = float(user_input)
+                        integer_part = int(abs(val))
+                        fractional_part = abs(val) - integer_part
+                        
+                        st.markdown("**整数部の変換:**")
+                        if integer_part == 0:
+                            st.code("0 → 0")
+                        else:
+                            conversion_steps = []
+                            temp = integer_part
+                            while temp > 0:
+                                conversion_steps.append(f"{temp} ÷ 2 = {temp//2} 余り {temp%2}")
+                                temp = temp // 2
+                            st.code("\n".join(conversion_steps))
+                        
+                        st.markdown("**小数部の変換:**")
+                        if fractional_part == 0:
+                            st.code("0.0 → 0")
+                        else:
+                            conversion_steps = []
+                            temp = fractional_part
+                            for i in range(10):  # 最大10桁まで
+                                if temp == 0:
+                                    break
+                                temp *= 2
+                                if temp >= 1:
+                                    conversion_steps.append(f"{temp-1:.6f} × 2 = {temp:.6f} → 1")
+                                    temp -= 1
+                                else:
+                                    conversion_steps.append(f"{temp:.6f} × 2 = {temp:.6f} → 0")
+                            st.code("\n".join(conversion_steps))
                     
                     result, error = perform_step_conversion(user_input, False, bit_format)
             else:

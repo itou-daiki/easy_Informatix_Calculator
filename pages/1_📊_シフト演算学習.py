@@ -46,57 +46,130 @@ with tab1:
 with tab2:
     st.subheader("💻 2進数のシフト演算")
     
+    # 入力セクション
     col1, col2 = st.columns(2)
     
     with col1:
         binary_num = st.number_input("数値 (0-255)", 0, 255, 10, key="bin")
         binary_shift_type = st.selectbox("演算", ["左シフト", "右シフト"], key="bin_type")
         
+    with col2:
         binary_shift_amount = st.number_input("シフト量", 1, 7, 1, key="bin_shift")
     
-    with col2:
-        if binary_shift_type == "左シフト":
-            binary_result = binary_num << binary_shift_amount
-            operation_symbol = "<<"
-        else:
-            binary_result = binary_num >> binary_shift_amount
-            operation_symbol = ">>"
-        
-        st.markdown("**計算結果:**")
-        st.code(f"{binary_num} {operation_symbol} {binary_shift_amount} = {binary_result}")
-        st.code(f"2進数: {format(binary_num, '08b')} → {format(binary_result, '08b')}")
-        
-        # 浮動小数点数での応用説明
-        if binary_shift_type == "左シフト":
-            st.info(f"💡 浮動小数点数では、正規化時に同じ左シフトの原理を使用します")
-        else:
-            st.info(f"💡 浮動小数点数では、非正規化数の処理で右シフトが使われることがあります")
+    # 計算実行
+    if binary_shift_type == "左シフト":
+        binary_result = binary_num << binary_shift_amount
+        operation_symbol = "<<"
+    else:
+        binary_result = binary_num >> binary_shift_amount
+        operation_symbol = ">>"
     
-    # ビット移動の視覚化
-    st.subheader("🔍 ビット移動の可視化")
+    st.markdown("---")
     
+    # ステップバイステップ説明
+    st.subheader("📋 ステップバイステップ解説")
+    
+    # ステップ1: 元の数値の確認
+    st.markdown("### ステップ1: 元の数値を2進数で表現")
+    step1_data = [{
+        "項目": "10進数",
+        "値": f"{binary_num}",
+        "説明": "入力された数値"
+    }, {
+        "項目": "2進数",
+        "値": f"{format(binary_num, '08b')}",
+        "説明": "8ビットで表現した2進数"
+    }, {
+        "項目": "ビット位置",
+        "値": "76543210",
+        "説明": "各ビットの位置（右から0番目）"
+    }]
+    st.dataframe(step1_data, use_container_width=True)
+    
+    # ステップ2: シフト演算の実行
+    st.markdown(f"### ステップ2: {binary_shift_type}を{binary_shift_amount}ビット実行")
+    
+    if binary_shift_type == "左シフト":
+        st.markdown(f"""
+        **左シフト (<<)** は、すべてのビットを左に移動させます：
+        - 右側の空いた部分は **0** で埋めます
+        - 左端からはみ出したビットは **消失** します
+        - 数学的効果: **元の値 × 2^{binary_shift_amount} = {binary_num} × {2**binary_shift_amount} = {binary_result}**
+        """)
+    else:
+        st.markdown(f"""
+        **右シフト (>>)** は、すべてのビットを右に移動させます：
+        - 左側の空いた部分は **0** で埋めます
+        - 右端からはみ出したビットは **消失** します
+        - 数学的効果: **元の値 ÷ 2^{binary_shift_amount} = {binary_num} ÷ {2**binary_shift_amount} = {binary_result}**
+        """)
+    
+    # ステップ3: ビット移動の可視化（データフレーム）
+    st.markdown("### ステップ3: ビット移動の可視化")
+    
+    # 移動前後の比較データ
     original_bits = format(binary_num, '08b')
     result_bits = format(binary_result, '08b')
     
-    col1, col2 = st.columns(2)
+    bit_comparison_data = []
     
-    with col1:
-        st.markdown("**元のビット**")
-        bit_display = ""
-        for i, bit in enumerate(original_bits):
-            bit_display += f"[{bit}]"
-            if i == 3:
-                bit_display += " "
-        st.markdown(f"`{bit_display}`")
+    # ヘッダー行
+    bit_comparison_data.append({
+        "状態": "移動前",
+        "ビット7": original_bits[0],
+        "ビット6": original_bits[1],
+        "ビット5": original_bits[2],
+        "ビット4": original_bits[3],
+        "ビット3": original_bits[4],
+        "ビット2": original_bits[5],
+        "ビット1": original_bits[6],
+        "ビット0": original_bits[7],
+        "10進数": f"{binary_num}"
+    })
     
-    with col2:
-        st.markdown(f"**{binary_shift_type}後**")
-        bit_display_result = ""
-        for i, bit in enumerate(result_bits):
-            bit_display_result += f"[{bit}]"
-            if i == 3:
-                bit_display_result += " "
-        st.markdown(f"`{bit_display_result}`")
+    bit_comparison_data.append({
+        "状態": f"{binary_shift_type}後",
+        "ビット7": result_bits[0],
+        "ビット6": result_bits[1],
+        "ビット5": result_bits[2],
+        "ビット4": result_bits[3],
+        "ビット3": result_bits[4],
+        "ビット2": result_bits[5],
+        "ビット1": result_bits[6],
+        "ビット0": result_bits[7],
+        "10進数": f"{binary_result}"
+    })
+    
+    st.dataframe(bit_comparison_data, use_container_width=True)
+    
+    # ステップ4: 結果の確認
+    st.markdown("### ステップ4: 結果の確認")
+    result_data = [{
+        "演算": f"{binary_num} {operation_symbol} {binary_shift_amount}",
+        "2進数": f"{format(binary_num, '08b')} → {format(binary_result, '08b')}",
+        "10進数": f"{binary_num} → {binary_result}",
+        "数学的効果": f"×{2**binary_shift_amount}" if binary_shift_type == "左シフト" else f"÷{2**binary_shift_amount}"
+    }]
+    st.dataframe(result_data, use_container_width=True)
+    
+    # 浮動小数点数との関連性
+    st.markdown("---")
+    st.subheader("🌊 浮動小数点数での応用")
+    
+    if binary_shift_type == "左シフト":
+        st.info("""
+        💡 **浮動小数点数の正規化での応用:**
+        - 0.0001101₂ のような小数を正規化する際に左シフトを使用
+        - 小数点を右に移動させることで 1.101 × 2⁻⁴ の形にする
+        - コンピュータ内部では実際にビットを左にシフトして処理
+        """)
+    else:
+        st.info("""
+        💡 **浮動小数点数での右シフト応用:**
+        - 非正規化数の処理で使用される場合がある
+        - オーバーフロー時の調整に利用
+        - 精度の調整や丸め処理で活用
+        """)
 
 with tab3:
     st.subheader("🧩 練習問題")

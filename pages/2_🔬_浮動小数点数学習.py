@@ -184,7 +184,10 @@ def perform_step_conversion(value, is_binary=True, bit_format=32):
             exponent = len(integer_part) - first_one_pos - 1
             normalized_mantissa = integer_part[first_one_pos+1:] + fractional_part
             
-            steps.append(("➁ 正規化", f"数値を **1.xxxxx** の形に変換\n\n**「{binary_str}」** を右にシフトして **「1.{normalized_mantissa} × 2^{exponent}」** にします。"))
+            # 上付き文字変換
+            superscript_map = {'-': '⁻', '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹'}
+            exp_super = ''.join(superscript_map.get(c, c) for c in str(exponent))
+            steps.append(("➁ 正規化", f"数値を **1.xxxxx** の形に変換\n\n**「{binary_str}」** を右にシフトして **「1.{normalized_mantissa} × 2{exp_super}」** にします。"))
             
         else:
             # 1未満の場合
@@ -206,7 +209,10 @@ def perform_step_conversion(value, is_binary=True, bit_format=32):
             exponent = -first_one_pos
             normalized_mantissa = fractional_part[first_one_pos-1:]
             
-            steps.append(("➁ 正規化", f"数値を **1.xxxxx** の形に変換\n\n**「{binary_str}」** を左にシフトして **「1.{normalized_mantissa[1:]} × 2^{exponent}」** にします。"))
+            # 上付き文字変換
+            superscript_map = {'-': '⁻', '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹'}
+            exp_super = ''.join(superscript_map.get(c, c) for c in str(exponent))
+            steps.append(("➁ 正規化", f"数値を **1.xxxxx** の形に変換\n\n**「{binary_str}」** を左にシフトして **「1.{normalized_mantissa[1:]} × 2{exp_super}」** にします。"))
         
         # ステップ3: 指数部
         bias = 127 if bit_format == 32 else 1023

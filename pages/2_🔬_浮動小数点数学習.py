@@ -164,7 +164,7 @@ def perform_step_conversion(value, is_binary=True, bit_format=32):
         
         # ステップ1: 符号部
         sign_bit = 0 if decimal_val >= 0 else 1
-        steps.append(("➀ 符号部", f"この数値は{'正' if sign_bit == 0 else '負'}なので、符号ビットは **「{sign_bit}」** です。"))
+        steps.append(("➀ 符号部", f"この数値は **{'正' if sign_bit == 0 else '負'}** なので、符号ビットは **「{sign_bit}」** です。"))
         
         abs_decimal = abs(decimal_val)
         
@@ -187,7 +187,7 @@ def perform_step_conversion(value, is_binary=True, bit_format=32):
             # 上付き文字変換
             superscript_map = {'-': '⁻', '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹'}
             exp_super = ''.join(superscript_map.get(c, c) for c in str(exponent))
-            steps.append(("➁ 正規化", f"数値を **1.xxxxx** の形に変換\n\n**「{binary_str}」** を右にシフトして **「1.{normalized_mantissa} × 2{exp_super}」** にします。"))
+            steps.append(("➁ 正規化", f"数値を **1.xxxxx** の形に変換\n\n**「{binary_str}」** を **右にシフト** して **「1.{normalized_mantissa} × 2{exp_super}」** にします。"))
             
         else:
             # 1未満の場合
@@ -212,7 +212,7 @@ def perform_step_conversion(value, is_binary=True, bit_format=32):
             # 上付き文字変換
             superscript_map = {'-': '⁻', '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹'}
             exp_super = ''.join(superscript_map.get(c, c) for c in str(exponent))
-            steps.append(("➁ 正規化", f"数値を **1.xxxxx** の形に変換\n\n**「{binary_str}」** を左にシフトして **「1.{normalized_mantissa[1:]} × 2{exp_super}」** にします。"))
+            steps.append(("➁ 正規化", f"数値を **1.xxxxx** の形に変換\n\n**「{binary_str}」** を **左にシフト** して **「1.{normalized_mantissa[1:]} × 2{exp_super}」** にします。"))
         
         # ステップ3: 指数部
         bias = 127 if bit_format == 32 else 1023
@@ -225,7 +225,7 @@ def perform_step_conversion(value, is_binary=True, bit_format=32):
             return None, f"指数がサポート範囲外です ({biased_exponent})"
         
         bias_formula = "2⁷-1" if bit_format == 32 else "2¹⁰-1"
-        steps.append(("➂ 指数部", f"バイアスを使用して指数を変換\n\n{bit_format//8*4}精度浮動小数点数のバイアスは **{bias}** ← {bias_formula}で覚えよう\n\n実際の指数 **{exponent}** に{bias}を加えた **{biased_exponent}**（2進数で **{format(biased_exponent, f'0{exponent_bits}b')}**）が指数部に"))
+        steps.append(("➂ 指数部", f"**バイアス** を使用して指数を変換\n\n**{bit_format//8*4}精度浮動小数点数** のバイアスは **{bias}** ← **{bias_formula}** で覚えよう\n\n実際の指数 **{exponent}** に **{bias}** を加えた **{biased_exponent}**（**2進数** で **{format(biased_exponent, f'0{exponent_bits}b')}**）が **指数部** に"))
         
         # ステップ4: 仮数部
         if abs_decimal >= 1:
@@ -235,7 +235,7 @@ def perform_step_conversion(value, is_binary=True, bit_format=32):
         
         mantissa_padded = (mantissa_fraction + "0" * mantissa_bits)[:mantissa_bits]
         
-        steps.append(("④ 仮数部", f"正規化した数の小数部分を取る\n\n**1.{mantissa_fraction}** の小数部分は **{mantissa_fraction}** 　仮数部は{mantissa_bits}ビット　残りのビットは0で埋める"))
+        steps.append(("④ 仮数部", f"**正規化した数** の **小数部分** を取る\n\n**1.{mantissa_fraction}** の小数部分は **{mantissa_fraction}** 　**仮数部** は **{mantissa_bits}ビット** 　残りのビットは **0で埋める**"))
         
         # 最終結果
         final_binary = f"{sign_bit} {format(biased_exponent, f'0{exponent_bits}b')} {mantissa_padded}"

@@ -450,7 +450,8 @@ with tab3:
                 
                 # 最終結果
                 st.markdown("### 🎯 最終結果")
-                st.success(f"**IEEE 754 ({bit_format}bit)形式:** `{result['final_binary']}`")
+                format_name = "単精度浮動小数点" if bit_format == 32 else "倍精度浮動小数点"
+                st.success(f"**{format_name}：{bit_format}ビット（IEEE 754形式）:** `{result['final_binary']}`")
                 
                 # 検証
                 if result['verification']:

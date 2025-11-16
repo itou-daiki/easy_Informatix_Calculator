@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>基数変換学習</title>
+    <meta name="description" content="n進数からm進数への変換を学習。位取り記数法を用いた計算過程を可視化します。">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/css/custom.css">
+</head>
+<body class="bg-gray-50 dark:bg-gray-900">
+    <!-- ヘッダー -->
+    <header class="bg-white dark:bg-gray-800">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <a href="index.html" class="text-gray-600 dark:text-gray-400 hover:text-primary">← 戻る</a>
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">基数変換学習</h1>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">n進数からm進数への変換</p>
+                </div>
+            </div>
+            <button id="theme-toggle" class="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
+                <!-- ダークモード切り替え -->
+            </button>
+        </div>
+    </header>
+
+    <!-- メインコンテンツ -->
+    <main class="container mx-auto px-4 py-8 max-w-5xl">
+        <!-- タブナビゲーション -->
+        <div class="mb-8 border-b border-gray-200 dark:border-gray-700">
+            <div class="flex space-x-4">
+                <button data-tab="explanation" class="tab-button tab-button-active">説明</button>
+                <button data-tab="converter" class="tab-button tab-button-inactive">基数変換体験</button>
+                <button data-tab="quiz" class="tab-button tab-button-inactive">練習問題</button>
+            </div>
+        </div>
+
+        <!-- 説明タブ -->
+        <div data-tab-content="explanation">
+            <div class="card">
+                <h2 class="text-3xl font-bold mb-4 text-gray-900 dark:text-white">基数変換とは？</h2>
+                <p class="mb-6 text-gray-700 dark:text-gray-300">
+                    基数変換は、異なる進数の間で数値を変換する方法です。<br>
+                    コンピュータサイエンスでは、2進数、8進数、10進数、16進数がよく使用されます。
+                </p>
+
+                <h3 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">主な進数</h3>
+                <div class="grid md:grid-cols-2 gap-6 mb-8">
+                    <div class="step-card">
+                        <h4 class="text-lg font-bold mb-3 text-gray-900 dark:text-white">2進数（Binary）</h4>
+                        <p class="mb-3 text-gray-700 dark:text-gray-300">
+                            使用する数字: 0, 1<br>
+                            コンピュータの基本
+                        </p>
+                        <div class="code-block">
+例: 1010₂ = 10₁₀
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <h4 class="text-lg font-bold mb-3 text-gray-900 dark:text-white">8進数（Octal）</h4>
+                        <p class="mb-3 text-gray-700 dark:text-gray-300">
+                            使用する数字: 0-7<br>
+                            2進数3桁を1桁で表現
+                        </p>
+                        <div class="code-block">
+例: 12₈ = 10₁₀
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <h4 class="text-lg font-bold mb-3 text-gray-900 dark:text-white">10進数（Decimal）</h4>
+                        <p class="mb-3 text-gray-700 dark:text-gray-300">
+                            使用する数字: 0-9<br>
+                            日常で使用する進数
+                        </p>
+                        <div class="code-block">
+例: 10₁₀
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <h4 class="text-lg font-bold mb-3 text-gray-900 dark:text-white">16進数（Hexadecimal）</h4>
+                        <p class="mb-3 text-gray-700 dark:text-gray-300">
+                            使用する記号: 0-9, A-F<br>
+                            2進数4桁を1桁で表現
+                        </p>
+                        <div class="code-block">
+例: A₁₆ = 10₁₀
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-info">
+                    <strong>位取り記数法とは？</strong>
+                    <p class="mt-2">
+                        各桁の位置によって値が決まる表記法です。例えば10進数の「123」は：<br>
+                        <code class="text-sm">1×10² + 2×10¹ + 3×10⁰ = 100 + 20 + 3 = 123</code>
+                    </p>
+                </div>
+            </div>
+
+            <!-- 変換の仕組み -->
+            <div class="card">
+                <h3 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">変換の仕組み</h3>
+                <div class="space-y-4">
+                    <div>
+                        <h4 class="text-lg font-bold mb-2 text-gray-900 dark:text-white">n進数 → 10進数</h4>
+                        <p class="text-gray-700 dark:text-gray-300 mb-2">位取り記数法を使って計算します。</p>
+                        <div class="code-block">
+例: 1011₂ → 10進数<br>
+1×2³ + 0×2² + 1×2¹ + 1×2⁰ = 8 + 0 + 2 + 1 = 11₁₀
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="text-lg font-bold mb-2 text-gray-900 dark:text-white">10進数 → n進数</h4>
+                        <p class="text-gray-700 dark:text-gray-300 mb-2">変換先の基数で割り算を繰り返します。</p>
+                        <div class="code-block">
+例: 11₁₀ → 2進数<br>
+11 ÷ 2 = 5 余り 1<br>
+ 5 ÷ 2 = 2 余り 1<br>
+ 2 ÷ 2 = 1 余り 0<br>
+ 1 ÷ 2 = 0 余り 1<br>
+答え: 1011₂ (余りを逆順に読む)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 基数変換体験タブ -->
+        <div data-tab-content="converter" class="hidden">
+            <div class="card">
+                <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">基数変換体験</h2>
+
+                <!-- 入力セクション -->
+                <div class="grid md:grid-cols-3 gap-6 mb-8">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">入力値</label>
+                        <input type="text" id="input-value" class="input-field" placeholder="例: 123" value="123">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">変換元の基数</label>
+                        <select id="from-base" class="input-field">
+                            <option value="2">2進数</option>
+                            <option value="8">8進数</option>
+                            <option value="10" selected>10進数</option>
+                            <option value="16">16進数</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">変換先の基数</label>
+                        <select id="to-base" class="input-field">
+                            <option value="2" selected>2進数</option>
+                            <option value="8">8進数</option>
+                            <option value="10">10進数</option>
+                            <option value="16">16進数</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button id="convert-base-btn" class="btn-primary mb-8">変換実行</button>
+
+                <!-- 結果表示 -->
+                <div id="conversion-result" class="hidden">
+                    <!-- 入力値の確認 -->
+                    <div class="step-card mb-6">
+                        <h3 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">入力値</h3>
+                        <div id="input-display"></div>
+                    </div>
+
+                    <!-- ステップ1: 10進数への変換 -->
+                    <div class="step-card mb-6">
+                        <h3 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">ステップ1: 10進数への変換</h3>
+                        <div id="step1-base"></div>
+                    </div>
+
+                    <!-- ステップ2: 目的の進数への変換 -->
+                    <div class="step-card mb-6">
+                        <h3 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">ステップ2: 目的の進数への変換</h3>
+                        <div id="step2-base"></div>
+                    </div>
+
+                    <!-- 最終結果 -->
+                    <div class="step-card border-primary">
+                        <h3 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">🎯 最終結果</h3>
+                        <div id="final-base-result"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 練習問題タブ -->
+        <div data-tab-content="quiz" class="hidden">
+            <div class="card">
+                <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">練習問題</h2>
+
+                <div class="space-y-6">
+                    <!-- 問題1 -->
+                    <div class="step-card">
+                        <h3 class="text-lg font-bold mb-3 text-gray-900 dark:text-white">問題1: 2進数→10進数</h3>
+                        <p class="mb-3 text-gray-700 dark:text-gray-300"><strong>1101₂ を10進数に変換すると？</strong></p>
+                        <input type="number" id="answer-q1" class="input-field mb-2" placeholder="答えを入力">
+                        <button id="check-q1" class="btn-primary">正解確認</button>
+                        <div id="result-q1" class="mt-3"></div>
+                    </div>
+
+                    <!-- 問題2 -->
+                    <div class="step-card">
+                        <h3 class="text-lg font-bold mb-3 text-gray-900 dark:text-white">問題2: 10進数→2進数</h3>
+                        <p class="mb-3 text-gray-700 dark:text-gray-300"><strong>15₁₀ を2進数に変換すると？</strong></p>
+                        <input type="text" id="answer-q2" class="input-field mb-2" placeholder="答えを入力（例: 1111）">
+                        <button id="check-q2" class="btn-primary">正解確認</button>
+                        <div id="result-q2" class="mt-3"></div>
+                    </div>
+
+                    <!-- 問題3 -->
+                    <div class="step-card">
+                        <h3 class="text-lg font-bold mb-3 text-gray-900 dark:text-white">問題3: 16進数→10進数</h3>
+                        <p class="mb-3 text-gray-700 dark:text-gray-300"><strong>1A₁₆ を10進数に変換すると？</strong></p>
+                        <input type="number" id="answer-q3" class="input-field mb-2" placeholder="答えを入力">
+                        <button id="check-q3" class="btn-primary">正解確認</button>
+                        <div id="result-q3" class="mt-3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- フッター -->
+    <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+        <div class="container mx-auto px-4 py-8 text-center">
+            <p class="mb-2 text-gray-600 dark:text-gray-400">基数変換学習</p>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                <a href="index.html" class="text-primary hover:underline">ホーム</a> |
+                <a href="shift-operation.html" class="text-primary hover:underline">シフト演算学習</a> |
+                <a href="floating-point.html" class="text-primary hover:underline">浮動小数点数学習</a> |
+                <a href="https://forms.gle/example" target="_blank" class="text-primary hover:underline">フィードバック</a>
+            </p>
+            <p class="text-sm text-gray-600 dark:text-gray-400">
+                © 2022-2025 <span class="font-semibold text-primary">Dit-Lab.(Daiki Ito)</span>. All Rights Reserved.
+            </p>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/base.js"></script>
+</body>
+</html>

@@ -1,19 +1,23 @@
-/* シンプルで教育的なデザイン - メインカラー: #1e90ff */
+/* シンプルで教育的なデザイン - アクセシビリティ重視 */
 
 :root {
     --primary: #1e90ff;
     --primary-hover: #1a7ad6;
-    --text-color: #333;
+    --text-color: #1a1a1a;
+    --text-secondary: #4a4a4a;
     --bg-color: #ffffff;
-    --border-color: #ddd;
+    --bg-secondary: #f8f9fa;
+    --border-color: #d0d0d0;
     --code-bg: #f5f5f5;
     --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
     --shadow-md: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .dark {
-    --text-color: #e5e5e5;
+    --text-color: #f0f0f0;
+    --text-secondary: #b0b0b0;
     --bg-color: #1a1a1a;
+    --bg-secondary: #242424;
     --border-color: #404040;
     --code-bg: #2a2a2a;
 }
@@ -23,6 +27,7 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP", "Hiragino Sans", sans-serif;
     line-height: 1.7;
     color: var(--text-color);
+    background-color: var(--bg-secondary);
 }
 
 /* ヘッダー */
@@ -39,6 +44,7 @@ header {
     border-radius: 8px;
     padding: 2rem;
     margin-bottom: 1.5rem;
+    box-shadow: var(--shadow-sm);
 }
 
 /* ボタン */
@@ -47,14 +53,20 @@ header {
     color: white;
     padding: 0.75rem 1.5rem;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     font-size: 1rem;
+    font-weight: 500;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, transform 0.1s;
 }
 
 .btn-primary:hover {
     background-color: var(--primary-hover);
+    transform: translateY(-1px);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
 }
 
 .btn-secondary {
@@ -62,8 +74,9 @@ header {
     color: white;
     padding: 0.75rem 1.5rem;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     font-size: 1rem;
+    font-weight: 500;
     cursor: pointer;
     transition: background-color 0.2s;
 }
@@ -76,11 +89,12 @@ header {
 .input-field {
     width: 100%;
     padding: 0.75rem;
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
+    border: 2px solid var(--border-color);
+    border-radius: 6px;
     font-size: 1rem;
     background: var(--bg-color);
     color: var(--text-color);
+    transition: border-color 0.2s;
 }
 
 .input-field:focus {
@@ -97,7 +111,8 @@ header {
     cursor: pointer;
     border-bottom: 3px solid transparent;
     transition: all 0.2s;
-    color: var(--text-color);
+    color: var(--text-secondary);
+    font-weight: 500;
 }
 
 .tab-button-active {
@@ -106,12 +121,9 @@ header {
     font-weight: 600;
 }
 
-.tab-button-inactive {
-    opacity: 0.6;
-}
-
 .tab-button-inactive:hover {
-    opacity: 1;
+    color: var(--text-color);
+    background-color: var(--bg-secondary);
 }
 
 /* ビット表示 */
@@ -121,8 +133,8 @@ header {
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
+    border: 2px solid var(--border-color);
+    border-radius: 6px;
     font-family: 'Courier New', monospace;
     font-size: 1.1rem;
     font-weight: 600;
@@ -142,31 +154,42 @@ header {
 /* アラート */
 .alert {
     padding: 1rem;
-    border-radius: 4px;
+    border-radius: 6px;
     margin-bottom: 1rem;
     border-left: 4px solid;
 }
 
 .alert-info {
-    background-color: #e7f3ff;
+    background-color: #e3f2fd;
     border-color: var(--primary);
-    color: #004085;
+    color: #01579b;
 }
 
 .dark .alert-info {
-    background-color: #1a3a52;
-    color: #9dc3e6;
+    background-color: #0d2d47;
+    color: #81d4fa;
 }
 
 .alert-success {
-    background-color: #d4edda;
-    border-color: #28a745;
-    color: #155724;
+    background-color: #e8f5e9;
+    border-color: #4caf50;
+    color: #1b5e20;
 }
 
 .dark .alert-success {
-    background-color: #1e3a2a;
-    color: #90ee90;
+    background-color: #1b3a1f;
+    color: #81c784;
+}
+
+.alert-warning {
+    background-color: #fff3e0;
+    border-color: #ff9800;
+    color: #e65100;
+}
+
+.dark .alert-warning {
+    background-color: #3d2e1f;
+    color: #ffb74d;
 }
 
 /* テーブル */
@@ -182,21 +205,24 @@ table th {
     text-align: left;
     font-weight: 600;
     border-bottom: 2px solid var(--border-color);
+    color: var(--text-color);
 }
 
 table td {
     padding: 0.75rem;
     border-bottom: 1px solid var(--border-color);
+    color: var(--text-color);
 }
 
 /* コードブロック */
 .code-block {
     background-color: var(--code-bg);
     border: 1px solid var(--border-color);
-    border-radius: 4px;
+    border-radius: 6px;
     padding: 1rem;
     font-family: 'Courier New', monospace;
     overflow-x: auto;
+    color: var(--text-color);
 }
 
 /* フッター */
@@ -216,9 +242,47 @@ footer {
     margin-bottom: 1.5rem;
 }
 
+/* 基数変換用スタイル */
+.base-box {
+    background: var(--code-bg);
+    border: 2px solid var(--border-color);
+    border-radius: 6px;
+    padding: 1rem;
+    font-family: 'Courier New', monospace;
+    font-size: 1.2rem;
+    text-align: center;
+    color: var(--text-color);
+    font-weight: 600;
+}
+
+.calculation-step {
+    background: var(--bg-secondary);
+    border-left: 4px solid var(--primary);
+    padding: 1rem;
+    margin: 0.5rem 0;
+    border-radius: 4px;
+}
+
+.digit-box {
+    display: inline-block;
+    min-width: 2.5rem;
+    padding: 0.5rem;
+    margin: 0.25rem;
+    background: var(--primary);
+    color: white;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+    text-align: center;
+}
+
 /* ユーティリティ */
 .text-primary {
     color: var(--primary);
+}
+
+.text-secondary {
+    color: var(--text-secondary);
 }
 
 .border-primary {
@@ -240,6 +304,10 @@ footer {
     .card {
         padding: 1rem;
     }
+
+    .base-box {
+        font-size: 1rem;
+    }
 }
 
 /* アニメーション（最小限） */
@@ -252,7 +320,7 @@ footer {
     animation: fadeIn 0.3s ease-in;
 }
 
-/* スクロールバー（シンプル） */
+/* スクロールバー */
 ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
@@ -285,4 +353,19 @@ a:hover {
 *:focus-visible {
     outline: 2px solid var(--primary);
     outline-offset: 2px;
+}
+
+/* 見出し */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-color);
+}
+
+/* 段落 */
+p {
+    color: var(--text-color);
+}
+
+/* リスト */
+ul, ol {
+    color: var(--text-color);
 }

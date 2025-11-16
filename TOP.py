@@ -17,7 +17,7 @@ with st.container():
         st.metric("📚 学習コンテンツ", "2種類", "シフト演算・浮動小数点数")
     
     with col2:
-        st.metric("🎯 対応形式", "32bit/64bit", "IEEE 754標準")
+        st.metric("🎯 対応形式", "16/32/64bit", "IEEE 754標準")
     
     with col3:
         st.metric("🧩 練習問題", "7問", "段階的難易度")
@@ -58,8 +58,9 @@ with col2:
     ### 🌊 浮動小数点数学習
     - IEEE 754標準の詳細理解
     - 段階的な変換プロセス（0→④のステップ）
-    - 32bit/64bit対応
-    - 例: 0.1015625 → 32ビット表現
+    - 16bit/32bit/64bit対応（半精度～倍精度）
+    - 正・負の実数に完全対応
+    - 例: 0.1015625 → IEEE 754形式
     """)
     
     if st.button("🚀 浮動小数点数を学ぶ", use_container_width=True):

@@ -22,7 +22,7 @@
     </script>
     <link rel="stylesheet" href="assets/css/custom.css">
 </head>
-<body class="bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 min-h-screen transition-colors duration-300">
+<body class="bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors duration-300">
     <!-- ヘッダー -->
     <header class="bg-white dark:bg-gray-800 shadow-lg sticky top-0 z-40">
         <nav class="container mx-auto px-4 py-4">
@@ -47,7 +47,7 @@
     <main class="container mx-auto px-4 py-8">
         <!-- ヒーローセクション -->
         <section class="text-center mb-12 animate-fadeIn">
-            <h2 class="text-5xl font-bold mb-4 gradient-text">
+            <h2 class="text-5xl font-bold mb-4 text-primary font-bold">
                 コンピュータの数値表現を学ぼう
             </h2>
             <p class="text-xl text-gray-600 dark:text-gray-300 mb-8">
@@ -283,15 +283,15 @@
                         対象レベル
                     </h3>
                     <div class="space-y-4">
-                        <div class="p-4 bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900 dark:to-blue-800 dark:bg-opacity-30 rounded-lg">
+                        <div class="p-4 bg-white dark:bg-gray-800 border-2 border-primary rounded-lg">
                             <h4 class="font-semibold text-gray-900 dark:text-white mb-1">高校生</h4>
                             <p class="text-sm text-gray-700 dark:text-gray-300">情報科目の発展学習</p>
                         </div>
-                        <div class="p-4 bg-gradient-to-r from-purple-50 to-purple-100 dark:from-purple-900 dark:to-purple-800 dark:bg-opacity-30 rounded-lg">
+                        <div class="p-4 bg-white dark:bg-gray-800 border-2 border-purple-500 rounded-lg">
                             <h4 class="font-semibold text-gray-900 dark:text-white mb-1">大学生</h4>
                             <p class="text-sm text-gray-700 dark:text-gray-300">コンピュータサイエンス基礎</p>
                         </div>
-                        <div class="p-4 bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900 dark:to-green-800 dark:bg-opacity-30 rounded-lg">
+                        <div class="p-4 bg-white dark:bg-gray-800 border-2 border-green-500 rounded-lg">
                             <h4 class="font-semibold text-gray-900 dark:text-white mb-1">プログラマー</h4>
                             <p class="text-sm text-gray-700 dark:text-gray-300">低レベル処理の理解</p>
                         </div>
@@ -314,11 +314,22 @@
     </main>
 
     <!-- フッター -->
-    <footer class="bg-white dark:bg-gray-800 shadow-lg mt-12">
-        <div class="container mx-auto px-4 py-6">
-            <div class="text-center text-gray-600 dark:text-gray-400">
-                <p class="mb-2">🔢 シフト演算・浮動小数点数学習アプリ</p>
-                <p class="text-sm">© 2025 高校生向けコンピュータサイエンス教材</p>
+    <footer class="bg-white dark:bg-gray-800 shadow-lg mt-12 border-t-2 border-primary">
+        <div class="container mx-auto px-4 py-8">
+            <div class="text-center">
+                <div class="mb-4">
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                        🔢 コンピュータ数値表現学習アプリ
+                    </h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                        シフト演算・浮動小数点数を楽しく学ぼう
+                    </p>
+                </div>
+                <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
+                    <p class="text-sm text-gray-600 dark:text-gray-400">
+                        © 2022-2025 <span class="font-semibold text-primary">Dit-Lab.(Daiki Ito)</span>. All Rights Reserved.
+                    </p>
+                </div>
             </div>
         </div>
     </footer>

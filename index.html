@@ -14,7 +14,7 @@
         <div class="container mx-auto px-4 py-4 flex justify-between items-center">
             <div>
                 <h1 class="text-2xl font-bold text-gray-900 dark:text-white">コンピュータ数値表現学習</h1>
-                <p class="text-sm text-gray-600 dark:text-gray-400">基数変換・シフト演算・浮動小数点数</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400">高校情報１の計算技能学習</p>
             </div>
             <button id="theme-toggle" class="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
                 <!-- ダークモード切り替え -->
@@ -28,13 +28,13 @@
         <section class="card">
             <h2 class="text-3xl font-bold mb-4 text-gray-900 dark:text-white">ようこそ</h2>
             <p class="text-lg mb-4 text-gray-700 dark:text-gray-300">
-                このアプリでは、コンピュータで使われる数値表現の基礎を学ぶことができます。<br>
-                基数変換、シフト演算、IEEE 754浮動小数点数の仕組みを、ステップバイステップで理解しましょう。
+                このアプリでは、高校情報１で学ぶコンピュータの数値表現と計算技能の基礎を学べます。<br>
+                基数変換、論理演算、2の補数、シフト演算、浮動小数点数、データ量計算を、ステップバイステップで理解しましょう。
             </p>
         </section>
 
         <!-- 学習内容 -->
-        <section class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <section class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             <!-- 基数変換 -->
             <div class="card">
                 <h3 class="text-2xl font-bold mb-3 text-gray-900 dark:text-white">🔢 基数変換</h3>
@@ -63,6 +63,36 @@
                     <li>✓ 練習問題で実践</li>
                 </ul>
                 <a href="shift-operation.html" class="btn-primary block text-center">シフト演算を学ぶ</a>
+            </div>
+
+            <!-- 論理演算 -->
+            <div class="card">
+                <h3 class="text-2xl font-bold mb-3 text-gray-900 dark:text-white">⚡ 論理演算</h3>
+                <p class="mb-4 text-gray-700 dark:text-gray-300">
+                    AND、OR、NOT、XORなどの論理演算を学びます。
+                </p>
+                <ul class="mb-6 space-y-2 text-gray-700 dark:text-gray-300">
+                    <li>✓ 6種類の論理演算</li>
+                    <li>✓ 真理値表の理解</li>
+                    <li>✓ ビット演算の可視化</li>
+                    <li>✓ 練習問題で実践</li>
+                </ul>
+                <a href="logical-operations.html" class="btn-primary block text-center">論理演算を学ぶ</a>
+            </div>
+
+            <!-- 2の補数 -->
+            <div class="card">
+                <h3 class="text-2xl font-bold mb-3 text-gray-900 dark:text-white">➖ 2の補数</h3>
+                <p class="mb-4 text-gray-700 dark:text-gray-300">
+                    負数の表現方法と加減算を学びます。
+                </p>
+                <ul class="mb-6 space-y-2 text-gray-700 dark:text-gray-300">
+                    <li>✓ 負数の表現方法</li>
+                    <li>✓ 2の補数の計算</li>
+                    <li>✓ 加減算の仕組み</li>
+                    <li>✓ 練習問題で実践</li>
+                </ul>
+                <a href="complement.html" class="btn-primary block text-center">2の補数を学ぶ</a>
             </div>
 
             <!-- 浮動小数点数 -->

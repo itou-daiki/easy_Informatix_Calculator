@@ -3,355 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📊 シフト演算学習 | 数値表現学習アプリ</title>
-    <meta name="description" content="ビットシフト演算を学習。左シフト・右シフトの仕組みをアニメーションで視覚的に理解できます。">
+    <title>シフト演算学習</title>
+    <meta name="description" content="ビットシフト演算を学習。左シフト・右シフトの仕組みを視覚的に理解できます。">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    animation: {
-                        'fadeIn': 'fadeIn 0.5s ease-out',
-                        'slideInLeft': 'slideInLeft 0.5s ease-out',
-                        'slideInRight': 'slideInRight 0.5s ease-out',
-                    }
-                }
-            }
-        }
-    </script>
     <link rel="stylesheet" href="assets/css/custom.css">
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 min-h-screen transition-colors duration-300">
+<body class="bg-gray-50 dark:bg-gray-900">
     <!-- ヘッダー -->
-    <header class="bg-white dark:bg-gray-800 shadow-lg sticky top-0 z-40">
-        <nav class="container mx-auto px-4 py-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-4">
-                    <a href="index.html" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                        </svg>
-                    </a>
-                    <div class="flex items-center space-x-3">
-                        <div class="text-4xl">📊</div>
-                        <div>
-                            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
-                                シフト演算学習
-                            </h1>
-                            <p class="text-sm text-gray-600 dark:text-gray-400">ビット操作の基本から応用まで</p>
-                        </div>
-                    </div>
+    <header class="bg-white dark:bg-gray-800">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <a href="index.html" class="text-gray-600 dark:text-gray-400 hover:text-primary">← 戻る</a>
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">シフト演算学習</h1>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">ビット操作の基本</p>
                 </div>
-                <button id="theme-toggle" class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200">
-                </button>
             </div>
-        </nav>
+            <button id="theme-toggle" class="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
+                <!-- ダークモード切り替え -->
+            </button>
+        </div>
     </header>
 
     <!-- メインコンテンツ -->
-    <main class="container mx-auto px-4 py-8">
+    <main class="container mx-auto px-4 py-8 max-w-5xl">
         <!-- タブナビゲーション -->
-        <div id="shift-tabs" class="mb-8">
-            <div class="border-b border-gray-200 dark:border-gray-700">
-                <div class="flex flex-wrap -mb-px">
-                    <button data-tab="explanation" class="tab-button tab-button-active px-6 py-3 font-medium border-b-2">
-                        📚 説明
-                    </button>
-                    <button data-tab="experience" class="tab-button tab-button-inactive px-6 py-3 font-medium border-b-2">
-                        💻 シフト演算体験
-                    </button>
-                    <button data-tab="quiz" class="tab-button tab-button-inactive px-6 py-3 font-medium border-b-2">
-                        🧩 練習問題
-                    </button>
+        <div class="mb-8 border-b border-gray-200 dark:border-gray-700">
+            <div class="flex space-x-4">
+                <button data-tab="explanation" class="tab-button tab-button-active">説明</button>
+                <button data-tab="experience" class="tab-button tab-button-inactive">シフト演算体験</button>
+                <button data-tab="quiz" class="tab-button tab-button-inactive">練習問題</button>
+            </div>
+        </div>
+
+        <!-- 説明タブ -->
+        <div data-tab-content="explanation">
+            <div class="card">
+                <h2 class="text-3xl font-bold mb-4 text-gray-900 dark:text-white">シフト演算とは？</h2>
+                <p class="mb-6 text-gray-700 dark:text-gray-300">
+                    シフト演算は、コンピュータでビット（0と1）を左右に移動させる演算です。<br>
+                    通常の乗除算よりも高速に実行でき、プログラミングで頻繁に使用されます。
+                </p>
+
+                <div class="grid md:grid-cols-2 gap-6 mb-8">
+                    <div class="step-card">
+                        <h3 class="text-xl font-bold mb-3 text-gray-900 dark:text-white">左シフト (<<)</h3>
+                        <p class="mb-3 text-gray-700 dark:text-gray-300">
+                            ビットを左に移動 → 2の累乗倍
+                        </p>
+                        <div class="code-block">
+5 << 1 = 10  (5 × 2¹)<br>
+5 << 2 = 20  (5 × 2²)<br>
+5 << 3 = 40  (5 × 2³)
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <h3 class="text-xl font-bold mb-3 text-gray-900 dark:text-white">右シフト (>>)</h3>
+                        <p class="mb-3 text-gray-700 dark:text-gray-300">
+                            ビットを右に移動 → 2の累乗で除算
+                        </p>
+                        <div class="code-block">
+20 >> 1 = 10  (20 ÷ 2¹)<br>
+20 >> 2 = 5   (20 ÷ 2²)<br>
+20 >> 3 = 2   (20 ÷ 2³)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-info">
+                    <strong>重要ポイント</strong>
+                    <ul class="mt-2 ml-4 space-y-1">
+                        <li>• シフト演算は通常の乗除算より高速です</li>
+                        <li>• 1ビット左シフトは2倍、1ビット右シフトは÷2と同じ</li>
+                        <li>• プログラミングで最適化やビット操作に活用されます</li>
+                    </ul>
                 </div>
             </div>
 
-            <!-- 説明タブ -->
-            <div data-tab-content="explanation" class="mt-8">
-                <div class="card mb-8 animate-fadeIn">
-                    <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white flex items-center">
-                        <span class="text-4xl mr-3">🔄</span>
-                        シフト演算とは？
-                    </h2>
-                    <p class="text-lg text-gray-700 dark:text-gray-300 mb-6">
-                        コンピュータでビットを左右に移動させる高速演算です。
-                        シフト演算は、通常の乗除算よりも高速に実行でき、プログラミングで頻繁に使用されます。
-                    </p>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                        <div class="p-6 bg-white dark:bg-gray-800 border-2 border-primary rounded-xl">
-                            <h3 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white flex items-center">
-                                <span class="mr-2">⬅️</span>
-                                左シフト (<<)
-                            </h3>
-                            <p class="text-gray-700 dark:text-gray-300 mb-4">
-                                ビットを左に移動 → <strong>2の累乗倍</strong>
-                            </p>
-                            <div class="bg-white dark:bg-gray-800 p-4 rounded-lg font-mono text-sm">
-                                <div class="mb-2">5 << 1 = 10  (5 × 2¹)</div>
-                                <div class="mb-2">5 << 2 = 20  (5 × 2²)</div>
-                                <div>5 << 3 = 40  (5 × 2³)</div>
-                            </div>
-                        </div>
-
-                        <div class="p-6 bg-white dark:bg-gray-800 border-2 border-purple-500 rounded-xl">
-                            <h3 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white flex items-center">
-                                <span class="mr-2">➡️</span>
-                                右シフト (>>)
-                            </h3>
-                            <p class="text-gray-700 dark:text-gray-300 mb-4">
-                                ビットを右に移動 → <strong>2の累乗で除算</strong>
-                            </p>
-                            <div class="bg-white dark:bg-gray-800 p-4 rounded-lg font-mono text-sm">
-                                <div class="mb-2">20 >> 1 = 10  (20 ÷ 2¹)</div>
-                                <div class="mb-2">20 >> 2 = 5   (20 ÷ 2²)</div>
-                                <div>20 >> 3 = 2   (20 ÷ 2³)</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="alert alert-info">
-                        <p class="font-semibold mb-2">💡 重要ポイント</p>
-                        <ul class="space-y-2 text-sm ml-4">
-                            <li>• シフト演算は通常の乗除算より<strong>高速</strong>です</li>
-                            <li>• 1ビット左シフトは<strong>2倍</strong>、1ビット右シフトは<strong>÷2</strong>と同じ</li>
-                            <li>• ビットがオーバーフローすると<strong>情報が失われる</strong>ことに注意</li>
-                            <li>• プログラミングで最適化やビット操作に活用される</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- 視覚的な説明 -->
-                <div class="card animate-fadeIn">
-                    <h3 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">📐 視覚的な理解</h3>
-                    <div class="space-y-6">
+            <!-- 視覚的な例 -->
+            <div class="card">
+                <h3 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">視覚的な理解</h3>
+                <div class="mb-6">
+                    <h4 class="text-lg font-bold mb-3 text-gray-900 dark:text-white">左シフトの例: 5 << 1</h4>
+                    <div class="space-y-4">
                         <div>
-                            <h4 class="text-xl font-semibold mb-3 text-gray-900 dark:text-white">左シフトの例: 5 << 1</h4>
-                            <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
-                                <div class="mb-4">
-                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">元の値: 5</p>
-                                    <div class="grid grid-cols-8 gap-2">
-                                        <div class="bit-cell bit-0">0</div>
-                                        <div class="bit-cell bit-0">0</div>
-                                        <div class="bit-cell bit-0">0</div>
-                                        <div class="bit-cell bit-0">0</div>
-                                        <div class="bit-cell bit-0">0</div>
-                                        <div class="bit-cell bit-1">1</div>
-                                        <div class="bit-cell bit-0">0</div>
-                                        <div class="bit-cell bit-1">1</div>
-                                    </div>
-                                </div>
-                                <div class="text-center text-3xl my-4">⬇️</div>
-                                <div>
-                                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">1ビット左シフト後: 10</p>
-                                    <div class="grid grid-cols-8 gap-2">
-                                        <div class="bit-cell bit-0">0</div>
-                                        <div class="bit-cell bit-0">0</div>
-                                        <div class="bit-cell bit-0">0</div>
-                                        <div class="bit-cell bit-0">0</div>
-                                        <div class="bit-cell bit-1">1</div>
-                                        <div class="bit-cell bit-0">0</div>
-                                        <div class="bit-cell bit-1">1</div>
-                                        <div class="bit-cell bit-0 bg-green-300 dark:bg-green-700">0</div>
-                                    </div>
-                                    <p class="text-sm text-green-600 dark:text-green-400 mt-2">← 右側に0が追加される</p>
-                                </div>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">元の値: 5 (10進数)</p>
+                            <div class="grid grid-cols-8 gap-2">
+                                <div class="bit-cell bit-0">0</div>
+                                <div class="bit-cell bit-0">0</div>
+                                <div class="bit-cell bit-0">0</div>
+                                <div class="bit-cell bit-0">0</div>
+                                <div class="bit-cell bit-0">0</div>
+                                <div class="bit-cell bit-1">1</div>
+                                <div class="bit-cell bit-0">0</div>
+                                <div class="bit-cell bit-1">1</div>
                             </div>
+                        </div>
+                        <div class="text-center text-2xl">⬇</div>
+                        <div>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">1ビット左シフト後: 10 (10進数)</p>
+                            <div class="grid grid-cols-8 gap-2">
+                                <div class="bit-cell bit-0">0</div>
+                                <div class="bit-cell bit-0">0</div>
+                                <div class="bit-cell bit-0">0</div>
+                                <div class="bit-cell bit-0">0</div>
+                                <div class="bit-cell bit-1">1</div>
+                                <div class="bit-cell bit-0">0</div>
+                                <div class="bit-cell bit-1">1</div>
+                                <div class="bit-cell bit-0">0</div>
+                            </div>
+                            <p class="text-sm text-green-600 dark:text-green-400 mt-2">→ 右側に0が追加される</p>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- シフト演算体験タブ -->
-            <div data-tab-content="experience" class="mt-8 hidden">
-                <div class="card mb-8 animate-fadeIn">
-                    <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white flex items-center">
-                        <span class="text-4xl mr-3">💻</span>
-                        シフト演算体験
-                    </h2>
+        <!-- シフト演算体験タブ -->
+        <div data-tab-content="experience" class="hidden">
+            <div class="card">
+                <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">シフト演算体験</h2>
 
-                    <!-- 入力セクション -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                                数値 (0-255)
-                            </label>
-                            <input type="number" id="shift-number" min="0" max="255" value="10"
-                                   class="input-field">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                                演算タイプ
-                            </label>
-                            <select id="shift-type" class="input-field">
-                                <option value="left">左シフト (<<)</option>
-                                <option value="right">右シフト (>>)</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                                シフト量 (1-7)
-                            </label>
-                            <input type="number" id="shift-amount" min="1" max="7" value="1"
-                                   class="input-field">
-                        </div>
+                <!-- 入力セクション -->
+                <div class="grid md:grid-cols-3 gap-4 mb-8">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">数値 (0-255)</label>
+                        <input type="number" id="shift-number" min="0" max="255" value="10" class="input-field">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">演算タイプ</label>
+                        <select id="shift-type" class="input-field">
+                            <option value="left">左シフト (<<)</option>
+                            <option value="right">右シフト (>>)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">シフト量 (1-7)</label>
+                        <input type="number" id="shift-amount" min="1" max="7" value="1" class="input-field">
+                    </div>
+                </div>
+
+                <!-- ステップ解説 -->
+                <div class="space-y-6">
+                    <div class="step-card">
+                        <h3 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">ステップ1: 元の数値を2進数で表現</h3>
+                        <div id="step1-content"></div>
                     </div>
 
-                    <!-- ステップ解説 -->
-                    <div class="space-y-6">
-                        <!-- ステップ1 -->
-                        <div class="bg-white dark:bg-gray-800 border-2 border-primary p-6 rounded-xl">
-                            <h3 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">
-                                ステップ1: 元の数値を2進数で表現
-                            </h3>
-                            <div id="step1-content"></div>
-                        </div>
-
-                        <!-- ステップ2 -->
-                        <div class="bg-white dark:bg-gray-800 border-2 border-purple-500 p-6 rounded-xl">
-                            <h3 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">
-                                ステップ2: シフト演算の実行
-                            </h3>
-                            <div id="step2-content"></div>
-                        </div>
-
-                        <!-- ステップ3 -->
-                        <div class="bg-white dark:bg-gray-800 border-2 border-green-500 p-6 rounded-xl">
-                            <h3 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">
-                                ステップ3: ビット移動の可視化
-                            </h3>
-                            <div id="step3-content"></div>
-                        </div>
-
-                        <!-- ステップ4 -->
-                        <div class="bg-white dark:bg-gray-800 border-2 border-orange-500 p-6 rounded-xl">
-                            <h3 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">
-                                ステップ4: 結果の確認
-                            </h3>
-                            <div id="step4-content"></div>
-                        </div>
+                    <div class="step-card">
+                        <h3 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">ステップ2: シフト演算の実行</h3>
+                        <div id="step2-content"></div>
                     </div>
 
-                    <!-- 浮動小数点数での応用 -->
-                    <div class="mt-8">
-                        <h3 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white flex items-center">
-                            <span class="text-3xl mr-2">🌊</span>
-                            浮動小数点数での応用
-                        </h3>
-                        <div id="floating-app-content"></div>
+                    <div class="step-card">
+                        <h3 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">ステップ3: ビット移動の可視化</h3>
+                        <div id="step3-content"></div>
+                    </div>
+
+                    <div class="step-card">
+                        <h3 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">ステップ4: 結果の確認</h3>
+                        <div id="step4-content"></div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- 練習問題タブ -->
-            <div data-tab-content="quiz" class="mt-8 hidden">
-                <div class="card animate-fadeIn">
-                    <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white flex items-center">
-                        <span class="text-4xl mr-3">🧩</span>
-                        練習問題
-                    </h2>
+        <!-- 練習問題タブ -->
+        <div data-tab-content="quiz" class="hidden">
+            <div class="card">
+                <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">練習問題</h2>
 
-                    <div class="space-y-6">
-                        <!-- 問題1 -->
-                        <div class="p-6 bg-gray-50 dark:bg-gray-800 rounded-xl">
-                            <h3 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
-                                問題1: 左シフト
-                            </h3>
-                            <p class="text-gray-700 dark:text-gray-300 mb-4">
-                                <strong>6 を 3ビット左シフトした結果は？</strong>
-                            </p>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <input type="number" id="answer-q1" class="input-field" placeholder="答えを入力">
-                                </div>
-                                <div class="flex space-x-2">
-                                    <button id="check-q1" class="btn-primary flex-1">正解確認</button>
-                                    <button id="hint-q1" class="btn-secondary">ヒント</button>
-                                </div>
+                <div class="space-y-6">
+                    <!-- 問題1 -->
+                    <div class="step-card">
+                        <h3 class="text-lg font-bold mb-3 text-gray-900 dark:text-white">問題1: 左シフト</h3>
+                        <p class="mb-4 text-gray-700 dark:text-gray-300"><strong>6 を 3ビット左シフトした結果は？</strong></p>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <input type="number" id="answer-q1" class="input-field" placeholder="答えを入力">
+                            <div class="flex space-x-2">
+                                <button id="check-q1" class="btn-primary flex-1">正解確認</button>
+                                <button id="hint-q1" class="btn-secondary">ヒント</button>
                             </div>
-                            <div id="result-q1"></div>
                         </div>
+                        <div id="result-q1"></div>
+                    </div>
 
-                        <!-- 問題2 -->
-                        <div class="p-6 bg-gray-50 dark:bg-gray-800 rounded-xl">
-                            <h3 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
-                                問題2: 右シフト
-                            </h3>
-                            <p class="text-gray-700 dark:text-gray-300 mb-4">
-                                <strong>56 を 2ビット右シフトした結果は？</strong>
-                            </p>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <input type="number" id="answer-q2" class="input-field" placeholder="答えを入力">
-                                </div>
-                                <div class="flex space-x-2">
-                                    <button id="check-q2" class="btn-primary flex-1">正解確認</button>
-                                    <button id="hint-q2" class="btn-secondary">ヒント</button>
-                                </div>
+                    <!-- 問題2 -->
+                    <div class="step-card">
+                        <h3 class="text-lg font-bold mb-3 text-gray-900 dark:text-white">問題2: 右シフト</h3>
+                        <p class="mb-4 text-gray-700 dark:text-gray-300"><strong>56 を 2ビット右シフトした結果は？</strong></p>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <input type="number" id="answer-q2" class="input-field" placeholder="答えを入力">
+                            <div class="flex space-x-2">
+                                <button id="check-q2" class="btn-primary flex-1">正解確認</button>
+                                <button id="hint-q2" class="btn-secondary">ヒント</button>
                             </div>
-                            <div id="result-q2"></div>
                         </div>
+                        <div id="result-q2"></div>
+                    </div>
 
-                        <!-- 問題3 -->
-                        <div class="p-6 bg-gray-50 dark:bg-gray-800 rounded-xl">
-                            <h3 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
-                                問題3: 2進数シフト
-                            </h3>
-                            <p class="text-gray-700 dark:text-gray-300 mb-4">
-                                <strong>2進数 10110 を1ビット左シフトした結果は？（2進数で回答）</strong>
-                            </p>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <input type="text" id="answer-q3" class="input-field" placeholder="2進数で入力">
-                                </div>
-                                <div class="flex space-x-2">
-                                    <button id="check-q3" class="btn-primary flex-1">正解確認</button>
-                                    <button id="hint-q3" class="btn-secondary">ヒント</button>
-                                </div>
+                    <!-- 問題3 -->
+                    <div class="step-card">
+                        <h3 class="text-lg font-bold mb-3 text-gray-900 dark:text-white">問題3: 2進数シフト</h3>
+                        <p class="mb-4 text-gray-700 dark:text-gray-300"><strong>2進数 10110 を1ビット左シフトした結果は？（2進数で回答）</strong></p>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <input type="text" id="answer-q3" class="input-field" placeholder="2進数で入力">
+                            <div class="flex space-x-2">
+                                <button id="check-q3" class="btn-primary flex-1">正解確認</button>
+                                <button id="hint-q3" class="btn-secondary">ヒント</button>
                             </div>
-                            <div id="result-q3"></div>
                         </div>
-
-                        <!-- 問題4 -->
-                        <div class="p-6 bg-gray-50 dark:bg-gray-800 rounded-xl">
-                            <h3 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
-                                問題4: 右シフト応用
-                            </h3>
-                            <p class="text-gray-700 dark:text-gray-300 mb-4">
-                                <strong>32 を 3ビット右シフトした結果は？</strong>
-                            </p>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <input type="number" id="answer-q4" class="input-field" placeholder="答えを入力">
-                                </div>
-                                <div class="flex space-x-2">
-                                    <button id="check-q4" class="btn-primary flex-1">正解確認</button>
-                                    <button id="hint-q4" class="btn-secondary">ヒント</button>
-                                </div>
-                            </div>
-                            <div id="result-q4"></div>
-                        </div>
-
-                        <!-- 問題5 -->
-                        <div class="p-6 bg-gray-50 dark:bg-gray-800 rounded-xl">
-                            <h3 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
-                                問題5: 左シフト応用
-                            </h3>
-                            <p class="text-gray-700 dark:text-gray-300 mb-4">
-                                <strong>15 を 2ビット左シフトした結果は？</strong>
-                            </p>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div>
-                                    <input type="number" id="answer-q5" class="input-field" placeholder="答えを入力">
-                                </div>
-                                <div class="flex space-x-2">
-                                    <button id="check-q5" class="btn-primary flex-1">正解確認</button>
-                                    <button id="hint-q5" class="btn-secondary">ヒント</button>
-                                </div>
-                            </div>
-                            <div id="result-q5"></div>
-                        </div>
+                        <div id="result-q3"></div>
                     </div>
                 </div>
             </div>
@@ -359,25 +222,17 @@
     </main>
 
     <!-- フッター -->
-    <footer class="bg-white dark:bg-gray-800 shadow-lg mt-12 border-t-2 border-primary">
-        <div class="container mx-auto px-4 py-8">
-            <div class="text-center">
-                <div class="mb-4">
-                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">
-                        📊 シフト演算学習
-                    </h3>
-                    <p class="text-sm text-gray-600 dark:text-gray-400">
-                        <a href="index.html" class="hover:text-primary transition-colors font-medium">ホームに戻る</a>
-                        <span class="mx-2">|</span>
-                        <a href="floating-point.html" class="hover:text-primary transition-colors font-medium">浮動小数点数学習へ</a>
-                    </p>
-                </div>
-                <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
-                    <p class="text-sm text-gray-600 dark:text-gray-400">
-                        © 2022-2025 <span class="font-semibold text-primary">Dit-Lab.(Daiki Ito)</span>. All Rights Reserved.
-                    </p>
-                </div>
-            </div>
+    <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+        <div class="container mx-auto px-4 py-8 text-center">
+            <p class="mb-2 text-gray-600 dark:text-gray-400">シフト演算学習</p>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                <a href="index.html" class="text-primary hover:underline">ホーム</a> |
+                <a href="floating-point.html" class="text-primary hover:underline">浮動小数点数学習</a> |
+                <a href="https://forms.gle/example" target="_blank" class="text-primary hover:underline">フィードバック</a>
+            </p>
+            <p class="text-sm text-gray-600 dark:text-gray-400">
+                © 2022-2025 <span class="font-semibold text-primary">Dit-Lab.(Daiki Ito)</span>. All Rights Reserved.
+            </p>
         </div>
     </footer>
 

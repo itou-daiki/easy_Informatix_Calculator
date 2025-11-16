@@ -14,7 +14,7 @@
         <div class="container mx-auto px-4 py-4 flex justify-between items-center">
             <div>
                 <h1 class="text-2xl font-bold text-gray-900 dark:text-white">コンピュータ数値表現学習</h1>
-                <p class="text-sm text-gray-600 dark:text-gray-400">シフト演算・浮動小数点数</p>
+                <p class="text-sm text-gray-600 dark:text-gray-400">基数変換・シフト演算・浮動小数点数</p>
             </div>
             <button id="theme-toggle" class="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
                 <!-- ダークモード切り替え -->
@@ -29,12 +29,27 @@
             <h2 class="text-3xl font-bold mb-4 text-gray-900 dark:text-white">ようこそ</h2>
             <p class="text-lg mb-4 text-gray-700 dark:text-gray-300">
                 このアプリでは、コンピュータで使われる数値表現の基礎を学ぶことができます。<br>
-                シフト演算とIEEE 754浮動小数点数の仕組みを、ステップバイステップで理解しましょう。
+                基数変換、シフト演算、IEEE 754浮動小数点数の仕組みを、ステップバイステップで理解しましょう。
             </p>
         </section>
 
         <!-- 学習内容 -->
-        <section class="grid md:grid-cols-2 gap-6 mb-8">
+        <section class="grid md:grid-cols-3 gap-6 mb-8">
+            <!-- 基数変換 -->
+            <div class="card">
+                <h3 class="text-2xl font-bold mb-3 text-gray-900 dark:text-white">🔢 基数変換</h3>
+                <p class="mb-4 text-gray-700 dark:text-gray-300">
+                    n進数からm進数への変換を学びます。
+                </p>
+                <ul class="mb-6 space-y-2 text-gray-700 dark:text-gray-300">
+                    <li>✓ 2/8/10/16進数対応</li>
+                    <li>✓ 位取り記数法の理解</li>
+                    <li>✓ 計算過程の可視化</li>
+                    <li>✓ 練習問題で実践</li>
+                </ul>
+                <a href="base-conversion.html" class="btn-primary block text-center">基数変換を学ぶ</a>
+            </div>
+
             <!-- シフト演算 -->
             <div class="card">
                 <h3 class="text-2xl font-bold mb-3 text-gray-900 dark:text-white">📊 シフト演算</h3>

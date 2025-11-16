@@ -79,7 +79,32 @@
                         科学技術計算やグラフィックス処理など、広範囲の数値を扱う必要がある場面で使用されます。
                     </p>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <!-- 16ビット -->
+                        <div class="p-6 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900 dark:to-green-800 dark:bg-opacity-30 rounded-xl">
+                            <h3 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">16ビット（半精度）</h3>
+                            <div class="overflow-x-auto mb-4">
+                                <table class="w-full text-sm">
+                                    <thead>
+                                        <tr class="border-b border-gray-300 dark:border-gray-600">
+                                            <th class="text-left py-2">要素</th>
+                                            <th class="text-left py-2">ビット数</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-gray-700 dark:text-gray-300">
+                                        <tr><td class="py-1">符号部</td><td>1ビット</td></tr>
+                                        <tr><td class="py-1">指数部</td><td>5ビット</td></tr>
+                                        <tr><td class="py-1">仮数部</td><td>10ビット</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="bg-white dark:bg-gray-800 p-3 rounded-lg">
+                                <p class="text-xs text-gray-600 dark:text-gray-400 mb-1">バイアス値</p>
+                                <p class="text-xl font-bold text-gray-900 dark:text-white">15 (2⁴ - 1)</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">GPU・機械学習で使用</p>
+                            </div>
+                        </div>
+
                         <!-- 32ビット -->
                         <div class="p-6 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900 dark:to-blue-800 dark:bg-opacity-30 rounded-xl">
                             <h3 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">32ビット（単精度）</h3>
@@ -101,6 +126,7 @@
                             <div class="bg-white dark:bg-gray-800 p-3 rounded-lg">
                                 <p class="text-xs text-gray-600 dark:text-gray-400 mb-1">バイアス値</p>
                                 <p class="text-xl font-bold text-gray-900 dark:text-white">127 (2⁷ - 1)</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">最も一般的</p>
                             </div>
                         </div>
 
@@ -125,6 +151,7 @@
                             <div class="bg-white dark:bg-gray-800 p-3 rounded-lg">
                                 <p class="text-xs text-gray-600 dark:text-gray-400 mb-1">バイアス値</p>
                                 <p class="text-xl font-bold text-gray-900 dark:text-white">1023 (2¹⁰ - 1)</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">高精度計算用</p>
                             </div>
                         </div>
                     </div>
@@ -213,8 +240,9 @@
                                 ビット形式
                             </label>
                             <select id="bit-format" class="input-field">
-                                <option value="32">32bit (単精度)</option>
-                                <option value="64">64bit (倍精度)</option>
+                                <option value="16">16bit (半精度) - GPU・機械学習</option>
+                                <option value="32" selected>32bit (単精度) - 一般的</option>
+                                <option value="64">64bit (倍精度) - 高精度</option>
                             </select>
                         </div>
                     </div>
@@ -225,13 +253,13 @@
                             数値を入力
                         </label>
                         <div class="flex gap-3">
-                            <input type="text" id="fp-input" class="input-field flex-1" placeholder="例: 0.1015625" value="0.1015625">
+                            <input type="text" id="fp-input" class="input-field flex-1" placeholder="例: 0.1015625, -3.14, 2.5" value="0.1015625">
                             <button id="convert-btn" class="btn-primary">
                                 変換実行
                             </button>
                         </div>
                         <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">
-                            ※現在は正の数のみサポートしています
+                            💡 正の数・負の数どちらも入力できます。ゼロは特別な表現になります。
                         </p>
                     </div>
 

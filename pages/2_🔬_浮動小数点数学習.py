@@ -810,3 +810,31 @@ with tab4:
                 else:
                     st.error("✗ 不正解")
                     st.info("無限大: 指数部=すべて1, 仮数部=すべて0")
+
+# フッター
+st.markdown("---")
+st.markdown("")
+st.markdown("")
+
+# フィードバックとコピーライト
+col1, col2 = st.columns([3, 1])
+
+with col1:
+    st.markdown(
+        """
+        <div style='text-align: left; color: #666; font-size: 0.9em;'>
+        ご意見・ご要望は <a href='https://github.com/itou-daiki/Floating-Point-Suppoter/issues' target='_blank' style='color: #0066cc;'>こちら</a>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+with col2:
+    st.markdown(
+        """
+        <div style='text-align: right; color: #666; font-size: 0.85em;'>
+        © 2022-2025 Dit-Lab.(Daiki Ito).<br>All Rights Reserved.
+        </div>
+        """,
+        unsafe_allow_html=True
+    )

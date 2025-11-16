@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2の補数学習</title>
+    <meta name="description" content="2の補数による負数の表現方法を学習。符号付き整数の仕組みを理解できます。">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/css/custom.css">
+</head>
+<body class="bg-gray-50 dark:bg-gray-900">
+    <!-- ヘッダー -->
+    <header class="bg-white dark:bg-gray-800">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <a href="index.html" class="text-gray-600 dark:text-gray-400 hover:text-primary">← 戻る</a>
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">2の補数学習</h1>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">負数の表現方法</p>
+                </div>
+            </div>
+            <button id="theme-toggle" class="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
+                <!-- ダークモード切り替え -->
+            </button>
+        </div>
+    </header>
+
+    <!-- メインコンテンツ -->
+    <main class="container mx-auto px-4 py-8 max-w-5xl">
+        <!-- タブナビゲーション -->
+        <div class="mb-8 border-b border-gray-200 dark:border-gray-700">
+            <div class="flex flex-wrap gap-2">
+                <button data-tab="explanation" class="tab-button tab-button-active">説明</button>
+                <button data-tab="converter" class="tab-button tab-button-inactive">変換ツール</button>
+                <button data-tab="calculator" class="tab-button tab-button-inactive">加減算</button>
+                <button data-tab="quiz" class="tab-button tab-button-inactive">練習問題</button>
+            </div>
+        </div>
+
+        <!-- 説明タブ -->
+        <div data-tab-content="explanation">
+            <div class="card">
+                <h2 class="text-3xl font-bold mb-4 text-gray-900 dark:text-white">2の補数とは？</h2>
+                <p class="mb-6 text-gray-700 dark:text-gray-300">
+                    2の補数は、コンピュータで負の整数を表現するための方法です。<br>
+                    最上位ビット（MSB）を符号ビットとして使用し、0なら正、1なら負を表します。
+                </p>
+
+                <div class="alert alert-info mb-8">
+                    <strong>2の補数の特徴</strong>
+                    <ul class="mt-2 ml-4 space-y-1">
+                        <li>• 最上位ビットが0なら正の数、1なら負の数</li>
+                        <li>• 加算回路だけで減算も実現できる</li>
+                        <li>• 表現範囲: nビットで -2^(n-1) ～ 2^(n-1)-1</li>
+                        <li>• 例: 8ビットなら -128 ～ 127</li>
+                    </ul>
+                </div>
+
+                <h3 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">2の補数の求め方</h3>
+                <div class="space-y-6">
+                    <div class="step-card">
+                        <h4 class="text-lg font-bold mb-3 text-gray-900 dark:text-white">ステップ1: ビット反転（1の補数）</h4>
+                        <p class="mb-3 text-gray-700 dark:text-gray-300">
+                            すべてのビットを反転します（0→1、1→0）
+                        </p>
+                        <div class="code-block">
+元の数: 00000101 (5)<br>
+反転後: 11111010 (1の補数)
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <h4 class="text-lg font-bold mb-3 text-gray-900 dark:text-white">ステップ2: 1を加算</h4>
+                        <p class="mb-3 text-gray-700 dark:text-gray-300">
+                            1の補数に1を加算します
+                        </p>
+                        <div class="code-block">
+1の補数: 11111010<br>
+＋　　　: 00000001<br>
+結果　　: 11111011 (-5の2の補数表現)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8">
+                    <h3 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">8ビット2の補数の例</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">10進数</th>
+                                    <th class="text-center">2の補数（8ビット）</th>
+                                    <th class="text-center">説明</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-center font-mono">127</td>
+                                    <td class="text-center font-mono">01111111</td>
+                                    <td class="text-center">最大の正数</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center font-mono">5</td>
+                                    <td class="text-center font-mono">00000101</td>
+                                    <td class="text-center">正の数</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center font-mono">0</td>
+                                    <td class="text-center font-mono">00000000</td>
+                                    <td class="text-center">ゼロ</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center font-mono">-1</td>
+                                    <td class="text-center font-mono">11111111</td>
+                                    <td class="text-center">負の数</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center font-mono">-5</td>
+                                    <td class="text-center font-mono">11111011</td>
+                                    <td class="text-center">負の数</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center font-mono">-128</td>
+                                    <td class="text-center font-mono">10000000</td>
+                                    <td class="text-center">最小の負数</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 変換ツールタブ -->
+        <div data-tab-content="converter" class="hidden">
+            <div class="card">
+                <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">2の補数変換ツール</h2>
+
+                <div class="mb-8">
+                    <h3 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">10進数 → 2の補数</h3>
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label class="block text-sm font-bold mb-2 text-gray-700 dark:text-gray-300">10進数（-128 ～ 127）</label>
+                            <input type="number" id="decimal-input" class="input-field" min="-128" max="127" value="5">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold mb-2 text-gray-700 dark:text-gray-300">ビット数</label>
+                            <select id="bit-length" class="input-field">
+                                <option value="8" selected>8ビット</option>
+                                <option value="16">16ビット</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button id="to-complement-btn" class="btn-primary mb-6">2の補数に変換</button>
+                    <div id="complement-result" class="hidden"></div>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">2の補数 → 10進数</h3>
+                    <div class="mb-6">
+                        <label class="block text-sm font-bold mb-2 text-gray-700 dark:text-gray-300">2の補数（2進数）</label>
+                        <input type="text" id="binary-input" class="input-field font-mono" placeholder="00000000" maxlength="16" value="11111011">
+                    </div>
+                    <button id="to-decimal-btn" class="btn-primary mb-6">10進数に変換</button>
+                    <div id="decimal-result" class="hidden"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 加減算タブ -->
+        <div data-tab-content="calculator" class="hidden">
+            <div class="card">
+                <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">2の補数による加減算</h2>
+                <p class="mb-6 text-gray-700 dark:text-gray-300">
+                    2の補数表現を使うと、減算も加算として計算できます。<br>
+                    A - B = A + (-B) として計算します。
+                </p>
+
+                <div class="grid md:grid-cols-3 gap-6 mb-6">
+                    <div>
+                        <label class="block text-sm font-bold mb-2 text-gray-700 dark:text-gray-300">値A（10進数）</label>
+                        <input type="number" id="calc-a" class="input-field" min="-128" max="127" value="10">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold mb-2 text-gray-700 dark:text-gray-300">演算</label>
+                        <select id="calc-op" class="input-field">
+                            <option value="add">加算 (+)</option>
+                            <option value="sub">減算 (-)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold mb-2 text-gray-700 dark:text-gray-300">値B（10進数）</label>
+                        <input type="number" id="calc-b" class="input-field" min="-128" max="127" value="3">
+                    </div>
+                </div>
+
+                <button id="calc-complement-btn" class="btn-primary mb-6">計算実行</button>
+                <div id="calc-complement-result" class="hidden"></div>
+            </div>
+        </div>
+
+        <!-- 練習問題タブ -->
+        <div data-tab-content="quiz" class="hidden">
+            <div class="card">
+                <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">練習問題</h2>
+
+                <!-- 問題1 -->
+                <div class="step-card mb-6">
+                    <h3 class="text-lg font-bold mb-3 text-gray-900 dark:text-white">問題1: 2の補数を求める</h3>
+                    <p class="mb-4 text-gray-700 dark:text-gray-300">
+                        10進数の -7 を8ビットの2の補数表現で答えてください。
+                    </p>
+                    <input type="text" id="answer-q1" class="input-field mb-3" placeholder="8桁の2進数を入力">
+                    <button id="check-q1" class="btn-secondary">答え合わせ</button>
+                    <div id="result-q1" class="mt-3"></div>
+                </div>
+
+                <!-- 問題2 -->
+                <div class="step-card mb-6">
+                    <h3 class="text-lg font-bold mb-3 text-gray-900 dark:text-white">問題2: 2の補数を10進数に変換</h3>
+                    <p class="mb-4 text-gray-700 dark:text-gray-300">
+                        8ビットの2の補数 11111101 を10進数で答えてください。
+                    </p>
+                    <input type="number" id="answer-q2" class="input-field mb-3" placeholder="10進数を入力">
+                    <button id="check-q2" class="btn-secondary">答え合わせ</button>
+                    <div id="result-q2" class="mt-3"></div>
+                </div>
+
+                <!-- 問題3 -->
+                <div class="step-card mb-6">
+                    <h3 class="text-lg font-bold mb-3 text-gray-900 dark:text-white">問題3: 加算</h3>
+                    <p class="mb-4 text-gray-700 dark:text-gray-300">
+                        8ビット2の補数表現で、00000101 + 11111100 を計算してください（結果は8ビット）。
+                    </p>
+                    <input type="text" id="answer-q3" class="input-field mb-3" placeholder="8桁の2進数を入力">
+                    <button id="check-q3" class="btn-secondary">答え合わせ</button>
+                    <div id="result-q3" class="mt-3"></div>
+                </div>
+
+                <!-- 問題4 -->
+                <div class="step-card mb-6">
+                    <h3 class="text-lg font-bold mb-3 text-gray-900 dark:text-white">問題4: 減算</h3>
+                    <p class="mb-4 text-gray-700 dark:text-gray-300">
+                        10進数で 10 - 15 を計算した結果を、8ビットの2の補数表現で答えてください。
+                    </p>
+                    <input type="text" id="answer-q4" class="input-field mb-3" placeholder="8桁の2進数を入力">
+                    <button id="check-q4" class="btn-secondary">答え合わせ</button>
+                    <div id="result-q4" class="mt-3"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- フッター -->
+    <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+        <div class="container mx-auto px-4 py-8 text-center">
+            <p class="mb-2 text-gray-600 dark:text-gray-400">コンピュータ数値表現学習</p>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                <a href="https://forms.gle/example" target="_blank" class="text-primary hover:underline">フィードバックフォーム</a>
+            </p>
+            <p class="text-sm text-gray-600 dark:text-gray-400">
+                © 2022-2025 <span class="font-semibold text-primary">Dit-Lab.(Daiki Ito)</span>. All Rights Reserved.
+            </p>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/complement.js"></script>
+</body>
+</html>

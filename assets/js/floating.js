@@ -460,7 +460,7 @@ class FloatingPointConverter {
                         <p class="font-semibold mb-2">💡 ゼロは特別な値です</p>
                         <p class="text-sm">IEEE 754では、ゼロは全ビットを0にすることで表現されます。</p>
                     </div>
-                    <div class="p-6 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900 dark:to-purple-900 dark:bg-opacity-20 rounded-xl">
+                    <div class="p-6 bg-blue-50 dark:bg-gray-800 rounded-2xl border-2 border-primary">
                         <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">${this.bitFormat}bit表現</p>
                         <p class="text-2xl font-mono font-bold text-gray-900 dark:text-white">
                             ${'0'.repeat(this.bitFormat)}
@@ -518,7 +518,7 @@ class FloatingPointConverter {
         if (finalResultDiv) {
             finalResultDiv.innerHTML = `
                 <div class="space-y-4">
-                    <div class="p-6 bg-gradient-to-r from-green-500 to-blue-500 text-white rounded-xl animate-fadeIn">
+                    <div class="p-6 bg-primary text-white rounded-2xl animate-fadeIn border-4 border-primary-dark shadow-xl">
                         <p class="text-sm mb-2 opacity-90">${result.spec.name}浮動小数点数：${this.bitFormat}ビット（IEEE 754形式）</p>
                         <p class="text-2xl font-mono font-bold break-all mb-4">
                             ${result.finalBinary}
@@ -539,7 +539,7 @@ class FloatingPointConverter {
                         </div>
                     </div>
 
-                    <div class="p-4 bg-blue-50 dark:bg-blue-900 dark:bg-opacity-20 rounded-lg">
+                    <div class="p-4 bg-blue-50 dark:bg-gray-800 rounded-xl border-2 border-primary">
                         <h4 class="font-semibold mb-2 text-gray-900 dark:text-white">💡 各部分の意味</h4>
                         <ul class="text-sm text-gray-700 dark:text-gray-300 space-y-1">
                             <li>• <strong>符号部</strong>: ${result.signBit === 0 ? '正の数' : '負の数'}を表す</li>
@@ -604,11 +604,11 @@ class FloatingPointConverter {
 
     getStepBgClass(index) {
         const colors = [
-            'bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900 dark:to-blue-800 dark:bg-opacity-30',
-            'bg-gradient-to-r from-purple-50 to-purple-100 dark:from-purple-900 dark:to-purple-800 dark:bg-opacity-30',
-            'bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900 dark:to-green-800 dark:bg-opacity-30',
-            'bg-gradient-to-r from-orange-50 to-orange-100 dark:from-orange-900 dark:to-orange-800 dark:bg-opacity-30',
-            'bg-gradient-to-r from-pink-50 to-pink-100 dark:from-pink-900 dark:to-pink-800 dark:bg-opacity-30'
+            'step-card bg-white dark:bg-gray-800',
+            'step-card bg-blue-50 dark:bg-gray-800',
+            'step-card bg-white dark:bg-gray-800',
+            'step-card bg-blue-50 dark:bg-gray-800',
+            'step-card bg-white dark:bg-gray-800'
         ];
         return colors[index % colors.length];
     }

@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>データ量学習</title>
+    <meta name="description" content="データの単位変換、画像・音声・動画のデータ量計算を学習できます。">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/css/custom.css">
+</head>
+<body class="bg-gray-50 dark:bg-gray-900">
+    <!-- ヘッダー -->
+    <header class="bg-white dark:bg-gray-800">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <a href="index.html" class="text-gray-600 dark:text-gray-400 hover:text-primary">← 戻る</a>
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">データ量学習</h1>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">単位変換と計算</p>
+                </div>
+            </div>
+            <button id="theme-toggle" class="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
+                <!-- ダークモード切り替え -->
+            </button>
+        </div>
+    </header>
+
+    <!-- メインコンテンツ -->
+    <main class="container mx-auto px-4 py-8 max-w-5xl">
+        <!-- タブナビゲーション -->
+        <div class="mb-8 border-b border-gray-200 dark:border-gray-700">
+            <div class="flex flex-wrap space-x-4">
+                <button data-tab="explanation" class="tab-button tab-button-active">説明</button>
+                <button data-tab="converter" class="tab-button tab-button-inactive">単位変換</button>
+                <button data-tab="image" class="tab-button tab-button-inactive">画像</button>
+                <button data-tab="audio" class="tab-button tab-button-inactive">音声</button>
+                <button data-tab="video" class="tab-button tab-button-inactive">動画</button>
+            </div>
+        </div>
+
+        <!-- 説明タブ -->
+        <div data-tab-content="explanation">
+            <div class="card">
+                <h2 class="text-3xl font-bold mb-4 text-gray-900 dark:text-white">データ量の単位</h2>
+                <p class="mb-6 text-gray-700 dark:text-gray-300">
+                    コンピュータで扱うデータの量を表す単位について学びます。<br>
+                    ビット(bit)が最小単位で、8ビットで1バイト(Byte)になります。
+                </p>
+
+                <h3 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">主な単位</h3>
+                <div class="overflow-x-auto mb-8">
+                    <table class="w-full">
+                        <thead>
+                            <tr>
+                                <th class="text-left">単位</th>
+                                <th class="text-left">記号</th>
+                                <th class="text-left">ビット数</th>
+                                <th class="text-left">バイト数</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>ビット</td><td>bit, b</td><td>1</td><td>1/8</td></tr>
+                            <tr><td>バイト</td><td>Byte, B</td><td>8</td><td>1</td></tr>
+                            <tr><td>キロバイト</td><td>KB</td><td>8,192</td><td>1,024</td></tr>
+                            <tr><td>メガバイト</td><td>MB</td><td>8,388,608</td><td>1,048,576</td></tr>
+                            <tr><td>ギガバイト</td><td>GB</td><td>8,589,934,592</td><td>1,073,741,824</td></tr>
+                            <tr><td>テラバイト</td><td>TB</td><td>-</td><td>1,099,511,627,776</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="alert alert-info">
+                    <strong>💡 重要ポイント</strong>
+                    <ul class="mt-2 ml-4 space-y-1">
+                        <li>• 1 Byte = 8 bit</li>
+                        <li>• 1 KB = 1,024 Byte (2¹⁰)</li>
+                        <li>• 1 MB = 1,024 KB = 1,048,576 Byte (2²⁰)</li>
+                        <li>• 1 GB = 1,024 MB = 1,073,741,824 Byte (2³⁰)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- データ量の計算 -->
+            <div class="card">
+                <h3 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">データ量の計算</h3>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="step-card">
+                        <h4 class="text-lg font-bold mb-3 text-gray-900 dark:text-white">📷 画像</h4>
+                        <p class="text-sm text-gray-700 dark:text-gray-300 mb-2">データ量 =</p>
+                        <div class="code-block text-xs">
+幅 × 高さ × 色深度 ÷ 8
+                        </div>
+                        <p class="text-xs text-gray-600 dark:text-gray-400 mt-2">
+                            例: 1920×1080ピクセル、24bit色
+                        </p>
+                    </div>
+
+                    <div class="step-card">
+                        <h4 class="text-lg font-bold mb-3 text-gray-900 dark:text-white">🎵 音声</h4>
+                        <p class="text-sm text-gray-700 dark:text-gray-300 mb-2">データ量 =</p>
+                        <div class="code-block text-xs">
+サンプリングレート ×<br>
+ビット深度 ×<br>
+チャンネル数 × 時間 ÷ 8
+                        </div>
+                        <p class="text-xs text-gray-600 dark:text-gray-400 mt-2">
+                            例: 44.1kHz、16bit、ステレオ
+                        </p>
+                    </div>
+
+                    <div class="step-card">
+                        <h4 class="text-lg font-bold mb-3 text-gray-900 dark:text-white">🎬 動画</h4>
+                        <p class="text-sm text-gray-700 dark:text-gray-300 mb-2">データ量 =</p>
+                        <div class="code-block text-xs">
+(画像データ量 ×<br>
+フレームレート + 音声) ×<br>
+時間
+                        </div>
+                        <p class="text-xs text-gray-600 dark:text-gray-400 mt-2">
+                            例: 1920×1080、30fps、音声付き
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 単位変換タブ -->
+        <div data-tab-content="converter" class="hidden">
+            <div class="card">
+                <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">データ量の単位変換</h2>
+
+                <div class="grid md:grid-cols-3 gap-6 mb-6">
+                    <div class="md:col-span-1">
+                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">値</label>
+                        <input type="number" id="unit-value" class="input-field" value="1" min="0" step="0.001">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">変換元</label>
+                        <select id="from-unit" class="input-field">
+                            <option value="bit">bit (ビット)</option>
+                            <option value="byte" selected>Byte (バイト)</option>
+                            <option value="kb">KB (キロバイト)</option>
+                            <option value="mb">MB (メガバイト)</option>
+                            <option value="gb">GB (ギガバイト)</option>
+                            <option value="tb">TB (テラバイト)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">変換先</label>
+                        <select id="to-unit" class="input-field">
+                            <option value="bit">bit (ビット)</option>
+                            <option value="byte">Byte (バイト)</option>
+                            <option value="kb">KB (キロバイト)</option>
+                            <option value="mb" selected>MB (メガバイト)</option>
+                            <option value="gb">GB (ギガバイト)</option>
+                            <option value="tb">TB (テラバイト)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button id="convert-unit-btn" class="btn-primary mb-6">変換実行</button>
+
+                <div id="unit-result" class="hidden">
+                    <div class="step-card border-primary">
+                        <h3 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">🎯 変換結果</h3>
+                        <div id="unit-result-display"></div>
+                    </div>
+
+                    <div class="step-card">
+                        <h3 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">計算過程</h3>
+                        <div id="unit-calculation"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 画像タブ -->
+        <div data-tab-content="image" class="hidden">
+            <div class="card">
+                <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">📷 画像のデータ量計算</h2>
+
+                <div class="grid md:grid-cols-3 gap-6 mb-6">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">幅 (ピクセル)</label>
+                        <input type="number" id="image-width" class="input-field" value="1920" min="1">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">高さ (ピクセル)</label>
+                        <input type="number" id="image-height" class="input-field" value="1080" min="1">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">色深度 (bit)</label>
+                        <select id="image-depth" class="input-field">
+                            <option value="1">1bit (白黒)</option>
+                            <option value="8">8bit (256色)</option>
+                            <option value="16">16bit (65,536色)</option>
+                            <option value="24" selected>24bit (フルカラー)</option>
+                            <option value="32">32bit (透明度付き)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button id="calc-image-btn" class="btn-primary mb-6">計算実行</button>
+
+                <div id="image-result" class="hidden">
+                    <div class="step-card">
+                        <h3 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">計算式</h3>
+                        <div id="image-formula"></div>
+                    </div>
+
+                    <div class="step-card border-primary">
+                        <h3 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">🎯 計算結果</h3>
+                        <div id="image-result-display"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 音声タブ -->
+        <div data-tab-content="audio" class="hidden">
+            <div class="card">
+                <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">🎵 音声のデータ量計算</h2>
+
+                <div class="grid md:grid-cols-4 gap-6 mb-6">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">サンプリングレート</label>
+                        <select id="audio-rate" class="input-field">
+                            <option value="8000">8kHz (電話品質)</option>
+                            <option value="16000">16kHz (音声認識)</option>
+                            <option value="22050">22.05kHz (低品質)</option>
+                            <option value="44100" selected>44.1kHz (CD品質)</option>
+                            <option value="48000">48kHz (DVD品質)</option>
+                            <option value="96000">96kHz (高品質)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">ビット深度</label>
+                        <select id="audio-depth" class="input-field">
+                            <option value="8">8bit</option>
+                            <option value="16" selected>16bit</option>
+                            <option value="24">24bit</option>
+                            <option value="32">32bit</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">チャンネル</label>
+                        <select id="audio-channels" class="input-field">
+                            <option value="1">モノラル (1ch)</option>
+                            <option value="2" selected>ステレオ (2ch)</option>
+                            <option value="6">5.1ch</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">時間 (秒)</label>
+                        <input type="number" id="audio-duration" class="input-field" value="60" min="1">
+                    </div>
+                </div>
+
+                <button id="calc-audio-btn" class="btn-primary mb-6">計算実行</button>
+
+                <div id="audio-result" class="hidden">
+                    <div class="step-card">
+                        <h3 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">計算式</h3>
+                        <div id="audio-formula"></div>
+                    </div>
+
+                    <div class="step-card border-primary">
+                        <h3 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">🎯 計算結果</h3>
+                        <div id="audio-result-display"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 動画タブ -->
+        <div data-tab-content="video" class="hidden">
+            <div class="card">
+                <h2 class="text-3xl font-bold mb-6 text-gray-900 dark:text-white">🎬 動画のデータ量計算</h2>
+
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">解像度</label>
+                        <select id="video-resolution" class="input-field">
+                            <option value="640,480">VGA (640×480)</option>
+                            <option value="1280,720">HD (1280×720)</option>
+                            <option value="1920,1080" selected>Full HD (1920×1080)</option>
+                            <option value="3840,2160">4K (3840×2160)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">色深度</label>
+                        <select id="video-depth" class="input-field">
+                            <option value="24" selected>24bit (フルカラー)</option>
+                            <option value="30">30bit (10bit色)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">フレームレート (fps)</label>
+                        <select id="video-fps" class="input-field">
+                            <option value="24">24fps (映画)</option>
+                            <option value="30" selected>30fps (標準)</option>
+                            <option value="60">60fps (高品質)</option>
+                            <option value="120">120fps (超高品質)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">時間 (秒)</label>
+                        <input type="number" id="video-duration" class="input-field" value="10" min="1">
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" id="video-audio" class="mr-2" checked>
+                        <span class="text-gray-700 dark:text-gray-300">音声を含む (44.1kHz, 16bit, ステレオ)</span>
+                    </label>
+                </div>
+
+                <button id="calc-video-btn" class="btn-primary mb-6">計算実行</button>
+
+                <div id="video-result" class="hidden">
+                    <div class="step-card">
+                        <h3 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">計算式</h3>
+                        <div id="video-formula"></div>
+                    </div>
+
+                    <div class="step-card border-primary">
+                        <h3 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">🎯 計算結果</h3>
+                        <div id="video-result-display"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- フッター -->
+    <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+        <div class="container mx-auto px-4 py-8 text-center">
+            <p class="mb-2 text-gray-600 dark:text-gray-400">データ量学習</p>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                <a href="index.html" class="text-primary hover:underline">ホーム</a> |
+                <a href="https://forms.gle/example" target="_blank" class="text-primary hover:underline">フィードバック</a>
+            </p>
+            <p class="text-sm text-gray-600 dark:text-gray-400">
+                © 2022-2025 <span class="font-semibold text-primary">Dit-Lab.(Daiki Ito)</span>. All Rights Reserved.
+            </p>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/data.js"></script>
+</body>
+</html>

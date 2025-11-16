@@ -31,6 +31,51 @@ class ThemeManager {
     }
 }
 
+// タブ管理（改善版）
+class TabManager {
+    constructor() {
+        this.init();
+    }
+
+    init() {
+        // すべてのタブボタンを取得
+        const tabButtons = document.querySelectorAll('[data-tab]');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tabName = button.getAttribute('data-tab');
+
+                // 同じグループのボタンを取得
+                const parentContainer = button.closest('[id$="-tabs"], .tab-container, main');
+                if (!parentContainer) return;
+
+                const groupButtons = parentContainer.querySelectorAll('[data-tab]');
+                const groupContents = parentContainer.querySelectorAll('[data-tab-content]');
+
+                // すべてのボタンを非アクティブに
+                groupButtons.forEach(btn => {
+                    btn.classList.remove('tab-button-active');
+                    btn.classList.add('tab-button-inactive');
+                });
+
+                // クリックされたボタンをアクティブに
+                button.classList.remove('tab-button-inactive');
+                button.classList.add('tab-button-active');
+
+                // すべてのコンテンツを非表示に
+                groupContents.forEach(content => {
+                    if (content.getAttribute('data-tab-content') === tabName) {
+                        content.classList.remove('hidden');
+                        content.classList.add('animate-fadeIn');
+                    } else {
+                        content.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    }
+}
+
 // プログレス管理
 class ProgressManager {
     constructor() {
@@ -63,64 +108,6 @@ class ProgressManager {
         this.data = {};
         this.save();
     }
-}
-
-// タブ管理
-class TabManager {
-    constructor(containerId) {
-        this.container = document.getElementById(containerId);
-        if (this.container) {
-            this.init();
-        }
-    }
-
-    init() {
-        const tabButtons = this.container.querySelectorAll('[data-tab]');
-        const tabContents = this.container.querySelectorAll('[data-tab-content]');
-
-        tabButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const tabName = button.getAttribute('data-tab');
-
-                // Update buttons
-                tabButtons.forEach(btn => {
-                    btn.classList.remove('border-blue-500', 'text-blue-600', 'dark:border-blue-400', 'dark:text-blue-400');
-                    btn.classList.add('border-transparent', 'text-gray-500', 'dark:text-gray-400');
-                });
-                button.classList.remove('border-transparent', 'text-gray-500', 'dark:text-gray-400');
-                button.classList.add('border-blue-500', 'text-blue-600', 'dark:border-blue-400', 'dark:text-blue-400');
-
-                // Update contents
-                tabContents.forEach(content => {
-                    if (content.getAttribute('data-tab-content') === tabName) {
-                        content.classList.remove('hidden');
-                        content.classList.add('animate-fadeIn');
-                    } else {
-                        content.classList.add('hidden');
-                    }
-                });
-            });
-        });
-    }
-}
-
-// アニメーション付きカウンター
-function animateCounter(element, start, end, duration) {
-    let startTime = null;
-
-    function animate(currentTime) {
-        if (!startTime) startTime = currentTime;
-        const progress = Math.min((currentTime - startTime) / duration, 1);
-
-        const value = Math.floor(progress * (end - start) + start);
-        element.textContent = value;
-
-        if (progress < 1) {
-            requestAnimationFrame(animate);
-        }
-    }
-
-    requestAnimationFrame(animate);
 }
 
 // 数値フォーマッター
@@ -211,6 +198,7 @@ class NotificationManager {
 document.addEventListener('DOMContentLoaded', () => {
     window.themeManager = new ThemeManager();
     window.progressManager = new ProgressManager();
+    window.tabManager = new TabManager(); // タブマネージャーを自動初期化
 
     // テーマ切り替えボタンのイベント
     const themeToggle = document.getElementById('theme-toggle');
@@ -236,6 +224,5 @@ document.addEventListener('DOMContentLoaded', () => {
 window.ThemeManager = ThemeManager;
 window.ProgressManager = ProgressManager;
 window.TabManager = TabManager;
-window.animateCounter = animateCounter;
 window.NumberFormatter = NumberFormatter;
 window.NotificationManager = NotificationManager;

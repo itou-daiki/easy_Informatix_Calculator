@@ -137,8 +137,8 @@ class FloatingPointConverter {
                 title: '⓪ 基数変換（10進数 → 2進数）',
                 content: this.generateBaseConversionContent(decimalValue, binaryStr),
                 explanation: `
-                    <div class="mt-4 p-4 bg-blue-50 dark:bg-blue-900 dark:bg-opacity-20 rounded-lg">
-                        <h4 class="font-semibold mb-2">💡 なぜ2進数に変換するのか？</h4>
+                    <div class="mt-4 p-4 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg">
+                        <h4 class="font-semibold mb-2 text-gray-900 dark:text-white">💡 なぜ2進数に変換するのか？</h4>
                         <p class="text-sm text-gray-700 dark:text-gray-300">
                             コンピュータは内部で2進数（0と1）しか扱えません。そのため、10進数を2進数に変換する必要があります。
                             整数部は2で割り続け、小数部は2を掛け続けることで変換できます。
@@ -157,17 +157,17 @@ class FloatingPointConverter {
                     <p class="text-gray-700 dark:text-gray-300">
                         元の値: <strong class="text-2xl">${originalValue}</strong>
                     </p>
-                    <div class="p-4 ${isNegative ? 'bg-red-50 dark:bg-red-900' : 'bg-green-50 dark:bg-green-900'} dark:bg-opacity-20 rounded-lg">
-                        <p class="text-lg">
+                    <div class="p-4 bg-gray-100 dark:bg-gray-800 border-2 ${isNegative ? 'border-red-500' : 'border-green-500'} rounded-lg">
+                        <p class="text-lg text-gray-900 dark:text-white">
                             この数値は <strong class="text-2xl">${isNegative ? '負' : '正'}</strong> なので、
-                            符号ビットは <strong class="text-3xl text-blue-600 dark:text-blue-400">「${signBit}」</strong>
+                            符号ビットは <strong class="text-3xl text-primary">「${signBit}」</strong>
                         </p>
                     </div>
                 </div>
             `,
             explanation: `
-                <div class="mt-4 p-4 bg-blue-50 dark:bg-blue-900 dark:bg-opacity-20 rounded-lg">
-                    <h4 class="font-semibold mb-2">💡 符号ビットの役割</h4>
+                <div class="mt-4 p-4 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg">
+                    <h4 class="font-semibold mb-2 text-gray-900 dark:text-white">💡 符号ビットの役割</h4>
                     <p class="text-sm text-gray-700 dark:text-gray-300 mb-2">
                         符号ビットは数値の正負を表す最も重要なビットです：
                     </p>
@@ -188,8 +188,8 @@ class FloatingPointConverter {
             title: '➁ 正規化（1.xxxxx × 2ⁿの形に変換）',
             content: this.generateNormalizationContent(binaryStr, normalized, absDecimal),
             explanation: `
-                <div class="mt-4 p-4 bg-blue-50 dark:bg-blue-900 dark:bg-opacity-20 rounded-lg">
-                    <h4 class="font-semibold mb-2">💡 正規化とは？</h4>
+                <div class="mt-4 p-4 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg">
+                    <h4 class="font-semibold mb-2 text-gray-900 dark:text-white">💡 正規化とは？</h4>
                     <p class="text-sm text-gray-700 dark:text-gray-300 mb-2">
                         正規化は、どんな2進数でも <strong>1.xxxxx × 2ⁿ</strong> の形に統一する処理です。
                     </p>
@@ -214,8 +214,8 @@ class FloatingPointConverter {
             title: '➂ 指数部の計算（バイアス表現）',
             content: this.generateExponentContent(normalized.exponent, spec, biasedExponent),
             explanation: `
-                <div class="mt-4 p-4 bg-blue-50 dark:bg-blue-900 dark:bg-opacity-20 rounded-lg">
-                    <h4 class="font-semibold mb-2">💡 なぜバイアスを使うのか？</h4>
+                <div class="mt-4 p-4 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg">
+                    <h4 class="font-semibold mb-2 text-gray-900 dark:text-white">💡 なぜバイアスを使うのか？</h4>
                     <p class="text-sm text-gray-700 dark:text-gray-300 mb-2">
                         指数は正の数にも負の数にもなりますが、コンピュータで負の数を扱うのは複雑です。
                         そこで「バイアス」という固定値を足すことで、すべて正の数として扱えるようにします。
@@ -237,8 +237,8 @@ class FloatingPointConverter {
             title: '④ 仮数部の構築',
             content: this.generateMantissaContent(normalized.mantissa, mantissaPadded, spec),
             explanation: `
-                <div class="mt-4 p-4 bg-blue-50 dark:bg-blue-900 dark:bg-opacity-20 rounded-lg">
-                    <h4 class="font-semibold mb-2">💡 仮数部の「暗黙の1」とは？</h4>
+                <div class="mt-4 p-4 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg">
+                    <h4 class="font-semibold mb-2 text-gray-900 dark:text-white">💡 仮数部の「暗黙の1」とは？</h4>
                     <p class="text-sm text-gray-700 dark:text-gray-300 mb-2">
                         正規化すると必ず「1.xxxxx」の形になります。つまり、小数点の左側は<strong>必ず1</strong>です。
                     </p>
@@ -305,17 +305,17 @@ class FloatingPointConverter {
         return `
             <div class="space-y-4">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="p-4 bg-blue-50 dark:bg-blue-900 dark:bg-opacity-20 rounded-lg">
+                    <div class="p-4 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg">
                         <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">10進数</p>
                         <p class="text-2xl font-bold text-gray-900 dark:text-white">${decimalValue}</p>
-                        <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
                             ${sign !== '' ? '符号: ' + sign + ' ' : ''}整数部: ${intPart}, 小数部: ${fracPart.toFixed(10)}
                         </p>
                     </div>
-                    <div class="p-4 bg-purple-50 dark:bg-purple-900 dark:bg-opacity-20 rounded-lg">
+                    <div class="p-4 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg">
                         <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">2進数（絶対値）</p>
                         <p class="text-xl font-mono font-bold text-gray-900 dark:text-white break-all">${binaryStr}</p>
-                        <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
                             符号は別途、符号ビットで表現
                         </p>
                     </div>
@@ -352,9 +352,9 @@ class FloatingPointConverter {
                     </div>
                 </div>
 
-                <div class="p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900 dark:to-purple-900 dark:bg-opacity-20 rounded-lg">
+                <div class="p-4 bg-gray-100 dark:bg-gray-800 border-2 border-primary rounded-lg">
                     <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">正規化後</p>
-                    <p class="text-2xl font-mono font-bold text-blue-600 dark:text-blue-400">
+                    <p class="text-2xl font-mono font-bold text-primary">
                         1.${normalized.mantissa} × 2${expSuper}
                     </p>
                     <div class="mt-3 text-sm text-gray-700 dark:text-gray-300">
@@ -371,22 +371,22 @@ class FloatingPointConverter {
 
         return `
             <div class="space-y-4">
-                <div class="p-4 bg-yellow-50 dark:bg-yellow-900 dark:bg-opacity-20 rounded-lg">
+                <div class="p-4 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg">
                     <h4 class="font-semibold mb-3 text-gray-900 dark:text-white">計算手順</h4>
                     <div class="space-y-2 text-gray-700 dark:text-gray-300">
                         <p>① 実際の指数: <strong class="text-xl">${exponent}</strong></p>
                         <p>② ${spec.name}浮動小数点数（${this.bitFormat}bit）のバイアス: <strong class="text-xl">${spec.bias}</strong></p>
                         <p class="text-sm text-gray-600 dark:text-gray-400 ml-4">※ ${biasFormula} = ${spec.bias}</p>
-                        <p>③ バイアス付き指数 = ${exponent} + ${spec.bias} = <strong class="text-2xl text-blue-600 dark:text-blue-400">${biasedExponent}</strong></p>
+                        <p>③ バイアス付き指数 = ${exponent} + ${spec.bias} = <strong class="text-2xl text-primary">${biasedExponent}</strong></p>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="p-4 bg-blue-50 dark:bg-blue-900 dark:bg-opacity-20 rounded-lg">
+                    <div class="p-4 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg">
                         <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">10進数表現</p>
                         <p class="text-3xl font-bold text-gray-900 dark:text-white">${biasedExponent}</p>
                     </div>
-                    <div class="p-4 bg-purple-50 dark:bg-purple-900 dark:bg-opacity-20 rounded-lg">
+                    <div class="p-4 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg">
                         <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">2進数表現（${spec.exponentBits}ビット）</p>
                         <p class="text-2xl font-mono font-bold text-gray-900 dark:text-white">
                             ${biasedExponent.toString(2).padStart(spec.exponentBits, '0')}
@@ -402,24 +402,24 @@ class FloatingPointConverter {
 
         return `
             <div class="space-y-4">
-                <div class="p-4 bg-green-50 dark:bg-green-900 dark:bg-opacity-20 rounded-lg">
+                <div class="p-4 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg">
                     <h4 class="font-semibold mb-3 text-gray-900 dark:text-white">仮数部の抽出</h4>
                     <p class="text-lg text-gray-700 dark:text-gray-300 mb-2">
                         正規化した形: <span class="font-mono text-xl">1.${displayMantissa}</span>
                     </p>
                     <p class="text-gray-700 dark:text-gray-300">
-                        → 小数点以下の部分: <span class="font-mono text-xl text-blue-600 dark:text-blue-400">${displayMantissa}</span>
+                        → 小数点以下の部分: <span class="font-mono text-xl text-primary">${displayMantissa}</span>
                     </p>
                 </div>
 
-                <div class="p-4 bg-purple-50 dark:bg-purple-900 dark:bg-opacity-20 rounded-lg">
+                <div class="p-4 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg">
                     <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
                         仮数部（${spec.mantissaBits}ビット、不足分は0で埋める）
                     </p>
                     <p class="text-lg font-mono font-bold text-gray-900 dark:text-white break-all">
                         ${mantissaPadded}
                     </p>
-                    <p class="text-xs text-gray-500 dark:text-gray-500 mt-2">
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
                         元のビット数: ${displayMantissa.length}、追加した0: ${spec.mantissaBits - displayMantissa.length}個
                     </p>
                 </div>
@@ -460,7 +460,7 @@ class FloatingPointConverter {
                         <p class="font-semibold mb-2">💡 ゼロは特別な値です</p>
                         <p class="text-sm">IEEE 754では、ゼロは全ビットを0にすることで表現されます。</p>
                     </div>
-                    <div class="p-6 bg-blue-50 dark:bg-gray-800 rounded-2xl border-2 border-primary">
+                    <div class="p-6 bg-gray-100 dark:bg-gray-800 rounded-2xl border-2 border-primary">
                         <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">${this.bitFormat}bit表現</p>
                         <p class="text-2xl font-mono font-bold text-gray-900 dark:text-white">
                             ${'0'.repeat(this.bitFormat)}
@@ -539,7 +539,7 @@ class FloatingPointConverter {
                         </div>
                     </div>
 
-                    <div class="p-4 bg-blue-50 dark:bg-gray-800 rounded-xl border-2 border-primary">
+                    <div class="p-4 bg-gray-100 dark:bg-gray-800 rounded-xl border-2 border-primary">
                         <h4 class="font-semibold mb-2 text-gray-900 dark:text-white">💡 各部分の意味</h4>
                         <ul class="text-sm text-gray-700 dark:text-gray-300 space-y-1">
                             <li>• <strong>符号部</strong>: ${result.signBit === 0 ? '正の数' : '負の数'}を表す</li>
@@ -560,21 +560,21 @@ class FloatingPointConverter {
 
             verificationDiv.innerHTML = `
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                    <div class="p-4 bg-blue-50 dark:bg-blue-900 dark:bg-opacity-20 rounded-lg">
+                    <div class="p-4 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg">
                         <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">元の値</p>
                         <p class="text-xl font-bold text-gray-900 dark:text-white">${v.originalValue.toFixed(10)}</p>
                     </div>
-                    <div class="p-4 bg-purple-50 dark:bg-purple-900 dark:bg-opacity-20 rounded-lg">
+                    <div class="p-4 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg">
                         <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">変換後の値</p>
                         <p class="text-xl font-bold text-gray-900 dark:text-white">${v.convertedValue.toFixed(10)}</p>
                     </div>
-                    <div class="p-4 bg-green-50 dark:bg-green-900 dark:bg-opacity-20 rounded-lg">
+                    <div class="p-4 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg">
                         <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">誤差</p>
                         <p class="text-xl font-bold text-gray-900 dark:text-white">${error.toExponential(2)}</p>
-                        <p class="text-xs text-gray-500 dark:text-gray-500">(${errorPercent}%)</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">(${errorPercent}%)</p>
                     </div>
                 </div>
-                <div class="p-4 bg-yellow-50 dark:bg-yellow-900 dark:bg-opacity-20 rounded-lg">
+                <div class="p-4 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg">
                     <h4 class="font-semibold mb-2 text-gray-900 dark:text-white">💡 誤差が生じる理由</h4>
                     <p class="text-sm text-gray-700 dark:text-gray-300">
                         浮動小数点数は限られたビット数で表現するため、すべての実数を正確に表現できるわけではありません。

@@ -29,15 +29,22 @@
             <h2 class="text-3xl font-bold mb-4 text-gray-900 dark:text-white">ようこそ</h2>
             <p class="text-lg mb-4 text-gray-700 dark:text-gray-300">
                 このアプリでは、高校情報１で学ぶコンピュータの数値表現と計算技能の基礎を学べます。<br>
-                基数変換、論理演算、2の補数、シフト演算、浮動小数点数、データ量計算を、ステップバイステップで理解しましょう。
+                基数変換から始まり、データ量、論理演算、シフト演算、2の補数、浮動小数点数まで、ステップバイステップで理解しましょう。
             </p>
+            <div class="alert alert-info">
+                <p class="font-semibold mb-2">📚 推奨学習順序</p>
+                <p class="text-sm">番号順に学習すると、段階的に理解を深められます。各トピックは前のトピックの知識を基礎としています。</p>
+            </div>
         </section>
 
         <!-- 学習内容 -->
         <section class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            <!-- 基数変換 -->
+            <!-- 1. 基数変換 -->
             <div class="card">
-                <h3 class="text-2xl font-bold mb-3 text-gray-900 dark:text-white">🔢 基数変換</h3>
+                <div class="flex items-center mb-3">
+                    <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white font-bold text-sm mr-3">1</span>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">🔢 基数変換</h3>
+                </div>
                 <p class="mb-4 text-gray-700 dark:text-gray-300">
                     n進数からm進数への変換を学びます。
                 </p>
@@ -50,24 +57,30 @@
                 <a href="base-conversion.html" class="btn-primary block text-center">基数変換を学ぶ</a>
             </div>
 
-            <!-- シフト演算 -->
+            <!-- 2. データ量 -->
             <div class="card">
-                <h3 class="text-2xl font-bold mb-3 text-gray-900 dark:text-white">📊 シフト演算</h3>
+                <div class="flex items-center mb-3">
+                    <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white font-bold text-sm mr-3">2</span>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">💾 データ量</h3>
+                </div>
                 <p class="mb-4 text-gray-700 dark:text-gray-300">
-                    ビットを左右に移動させる高速演算を学びます。
+                    データ量の単位と計算方法を学びます。
                 </p>
                 <ul class="mb-6 space-y-2 text-gray-700 dark:text-gray-300">
-                    <li>✓ 左シフト（<<）と右シフト（>>）</li>
-                    <li>✓ 2進数での計算理解</li>
-                    <li>✓ ビット移動の視覚化</li>
-                    <li>✓ 練習問題で実践</li>
+                    <li>✓ bit/Byte/KB/MB/GB/TB</li>
+                    <li>✓ 画像データ量計算</li>
+                    <li>✓ 音声データ量計算</li>
+                    <li>✓ 動画データ量計算</li>
                 </ul>
-                <a href="shift-operation.html" class="btn-primary block text-center">シフト演算を学ぶ</a>
+                <a href="data-size.html" class="btn-primary block text-center">データ量を学ぶ</a>
             </div>
 
-            <!-- 論理演算 -->
+            <!-- 3. 論理演算 -->
             <div class="card">
-                <h3 class="text-2xl font-bold mb-3 text-gray-900 dark:text-white">⚡ 論理演算</h3>
+                <div class="flex items-center mb-3">
+                    <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white font-bold text-sm mr-3">3</span>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">⚡ 論理演算</h3>
+                </div>
                 <p class="mb-4 text-gray-700 dark:text-gray-300">
                     AND、OR、NOT、XORなどの論理演算を学びます。
                 </p>
@@ -80,9 +93,30 @@
                 <a href="logical-operations.html" class="btn-primary block text-center">論理演算を学ぶ</a>
             </div>
 
-            <!-- 2の補数 -->
+            <!-- 4. シフト演算 -->
             <div class="card">
-                <h3 class="text-2xl font-bold mb-3 text-gray-900 dark:text-white">➖ 2の補数</h3>
+                <div class="flex items-center mb-3">
+                    <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white font-bold text-sm mr-3">4</span>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">📊 シフト演算</h3>
+                </div>
+                <p class="mb-4 text-gray-700 dark:text-gray-300">
+                    ビットを左右に移動させる高速演算を学びます。
+                </p>
+                <ul class="mb-6 space-y-2 text-gray-700 dark:text-gray-300">
+                    <li>✓ 左シフト（<<）と右シフト（>>）</li>
+                    <li>✓ 2進数での計算理解</li>
+                    <li>✓ ビット移動の視覚化</li>
+                    <li>✓ 練習問題で実践</li>
+                </ul>
+                <a href="shift-operation.html" class="btn-primary block text-center">シフト演算を学ぶ</a>
+            </div>
+
+            <!-- 5. 2の補数 -->
+            <div class="card">
+                <div class="flex items-center mb-3">
+                    <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white font-bold text-sm mr-3">5</span>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">➖ 2の補数</h3>
+                </div>
                 <p class="mb-4 text-gray-700 dark:text-gray-300">
                     負数の表現方法と加減算を学びます。
                 </p>
@@ -95,9 +129,12 @@
                 <a href="complement.html" class="btn-primary block text-center">2の補数を学ぶ</a>
             </div>
 
-            <!-- 浮動小数点数 -->
+            <!-- 6. 浮動小数点数 -->
             <div class="card">
-                <h3 class="text-2xl font-bold mb-3 text-gray-900 dark:text-white">🌊 浮動小数点数</h3>
+                <div class="flex items-center mb-3">
+                    <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white font-bold text-sm mr-3">6</span>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">🌊 浮動小数点数</h3>
+                </div>
                 <p class="mb-4 text-gray-700 dark:text-gray-300">
                     IEEE 754標準の浮動小数点数表現を学びます。
                 </p>
@@ -108,21 +145,6 @@
                     <li>✓ 正負の実数対応</li>
                 </ul>
                 <a href="floating-point.html" class="btn-primary block text-center">浮動小数点数を学ぶ</a>
-            </div>
-
-            <!-- データ量 -->
-            <div class="card">
-                <h3 class="text-2xl font-bold mb-3 text-gray-900 dark:text-white">💾 データ量</h3>
-                <p class="mb-4 text-gray-700 dark:text-gray-300">
-                    データ量の単位と計算方法を学びます。
-                </p>
-                <ul class="mb-6 space-y-2 text-gray-700 dark:text-gray-300">
-                    <li>✓ bit/Byte/KB/MB/GB/TB</li>
-                    <li>✓ 画像データ量計算</li>
-                    <li>✓ 音声データ量計算</li>
-                    <li>✓ 動画データ量計算</li>
-                </ul>
-                <a href="data-size.html" class="btn-primary block text-center">データ量を学ぶ</a>
             </div>
         </section>
 

@@ -97,47 +97,75 @@ class BaseConverter {
         } else {
             // 位取り記数法による計算過程
             const digits = value.toUpperCase().split('').reverse();
-            let calculations = [];
-            let sum = 0;
 
-            digits.forEach((digit, index) => {
-                const digitValue = parseInt(digit, base);
-                const positionValue = Math.pow(base, index);
-                const contribution = digitValue * positionValue;
-                sum += contribution;
-
-                calculations.push({
-                    digit: digit,
-                    value: digitValue,
-                    position: index,
-                    base: base,
-                    positionValue: positionValue,
-                    contribution: contribution
-                });
-            });
-
+            // 位取り表を作成
             html = `
                 <p class="text-gray-700 dark:text-gray-300 mb-4">
                     <strong>位取り記数法</strong>を使って各桁の値を計算します：
                 </p>
-                <div class="space-y-2 mb-4">
-                    ${calculations.reverse().map((calc, i) => `
-                        <div class="calculation-step">
-                            <div class="flex items-center space-x-2">
-                                <div class="digit-box">${calc.digit}</div>
-                                <span class="text-gray-700 dark:text-gray-300">×</span>
-                                <span class="text-gray-700 dark:text-gray-300 font-mono">
-                                    ${base}<sup>${calc.position}</sup> = ${calc.digit} × ${calc.positionValue} = ${calc.contribution}
-                                </span>
-                            </div>
-                        </div>
-                    `).join('')}
+
+                <!-- 位取り表 -->
+                <div class="overflow-x-auto mb-6">
+                    <table class="w-full border-collapse">
+                        <thead>
+                            <tr>
+                                <th class="p-2 text-center text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-800">桁</th>
+                                ${digits.map((_, i) => `
+                                    <th class="p-2 text-center text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-800 font-mono">
+                                        ${base}<sup>${digits.length - 1 - i}</sup>
+                                    </th>
+                                `).reverse().join('')}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="p-2 text-center font-semibold text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700">重み</td>
+                                ${digits.map((_, i) => {
+                                    const position = digits.length - 1 - i;
+                                    const weight = Math.pow(base, position);
+                                    return `
+                                        <td class="p-2 text-center text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 font-mono font-bold">
+                                            ${weight}
+                                        </td>
+                                    `;
+                                }).reverse().join('')}
+                            </tr>
+                            <tr>
+                                <td class="p-2 text-center font-semibold text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700">値</td>
+                                ${digits.map((digit, i) => `
+                                    <td class="p-2 text-center border border-gray-300 dark:border-gray-600">
+                                        <div class="digit-box">${digit}</div>
+                                    </td>
+                                `).reverse().join('')}
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <div class="p-4 bg-blue-50 dark:bg-gray-700 rounded-lg mb-4">
-                    <p class="text-gray-700 dark:text-gray-300 font-mono">
-                        ${calculations.reverse().map(c => c.contribution).join(' + ')} = ${sum}
+
+                <!-- 計算式 -->
+                <div class="p-4 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg mb-4">
+                    <p class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">計算式：</p>
+                    <p class="text-gray-700 dark:text-gray-300 font-mono text-lg">
+                        ${digits.map((digit, i) => {
+                            const digitValue = parseInt(digit, base);
+                            const position = digits.length - 1 - i;
+                            const weight = Math.pow(base, position);
+                            return `${digit}×${weight}`;
+                        }).reverse().join(' + ')}
+                    </p>
+                    <p class="text-gray-700 dark:text-gray-300 font-mono text-lg mt-2">
+                        = ${digits.map((digit, i) => {
+                            const digitValue = parseInt(digit, base);
+                            const position = digits.length - 1 - i;
+                            const weight = Math.pow(base, position);
+                            return digitValue * weight;
+                        }).reverse().join(' + ')}
+                    </p>
+                    <p class="text-gray-700 dark:text-gray-300 font-mono text-lg mt-2">
+                        = <strong class="text-primary text-2xl">${decimal}</strong>
                     </p>
                 </div>
+
                 <div class="base-box">${decimal}₁₀</div>
             `;
         }
@@ -160,7 +188,7 @@ class BaseConverter {
             let current = decimal;
 
             if (current === 0) {
-                steps.push({ quotient: 0, remainder: 0 });
+                steps.push({ quotient: 0, remainder: 0, remainderChar: '0' });
             } else {
                 while (current > 0) {
                     const quotient = Math.floor(current / base);
@@ -190,12 +218,80 @@ class BaseConverter {
                         </div>
                     `).join('')}
                 </div>
-                <div class="p-4 bg-yellow-50 dark:bg-gray-700 rounded-lg mb-4">
+                <div class="p-4 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg mb-6">
                     <p class="text-gray-700 dark:text-gray-300 font-semibold mb-2">余りを<strong>下から上</strong>に読みます：</p>
                     <div class="flex items-center space-x-2 flex-wrap">
                         ${steps.reverse().map(s => `<div class="digit-box">${s.remainderChar}</div>`).join('')}
                     </div>
                 </div>
+
+                <!-- 結果の確認：位取り表 -->
+                <div class="mb-6">
+                    <p class="text-gray-700 dark:text-gray-300 mb-4 font-semibold">
+                        📝 結果の確認（位取り記数法）：
+                    </p>
+                    <div class="overflow-x-auto mb-4">
+                        <table class="w-full border-collapse">
+                            <thead>
+                                <tr>
+                                    <th class="p-2 text-center text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-800">桁</th>
+                                    ${result.split('').map((_, i) => `
+                                        <th class="p-2 text-center text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-800 font-mono">
+                                            ${base}<sup>${result.length - 1 - i}</sup>
+                                        </th>
+                                    `).join('')}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="p-2 text-center font-semibold text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700">重み</td>
+                                    ${result.split('').map((_, i) => {
+                                        const position = result.length - 1 - i;
+                                        const weight = Math.pow(base, position);
+                                        return `
+                                            <td class="p-2 text-center text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 font-mono font-bold">
+                                                ${weight}
+                                            </td>
+                                        `;
+                                    }).join('')}
+                                </tr>
+                                <tr>
+                                    <td class="p-2 text-center font-semibold text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700">値</td>
+                                    ${result.split('').map(digit => `
+                                        <td class="p-2 text-center border border-gray-300 dark:border-gray-600">
+                                            <div class="digit-box">${digit}</div>
+                                        </td>
+                                    `).join('')}
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 検算 -->
+                    <div class="p-4 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg">
+                        <p class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">検算：</p>
+                        <p class="text-gray-700 dark:text-gray-300 font-mono">
+                            ${result.split('').map((digit, i) => {
+                                const position = result.length - 1 - i;
+                                const weight = Math.pow(base, position);
+                                const digitValue = parseInt(digit, base);
+                                return `${digit}×${weight}`;
+                            }).join(' + ')}
+                        </p>
+                        <p class="text-gray-700 dark:text-gray-300 font-mono mt-2">
+                            = ${result.split('').map((digit, i) => {
+                                const position = result.length - 1 - i;
+                                const weight = Math.pow(base, position);
+                                const digitValue = parseInt(digit, base);
+                                return digitValue * weight;
+                            }).join(' + ')}
+                        </p>
+                        <p class="text-gray-700 dark:text-gray-300 font-mono mt-2">
+                            = <strong class="text-primary text-xl">${decimal}</strong> ✓
+                        </p>
+                    </div>
+                </div>
+
                 <div class="base-box">${result} (${base}進数)</div>
             `;
         }

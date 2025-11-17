@@ -92,12 +92,93 @@
                     </div>
                 </div>
 
-                <div class="alert alert-info">
-                    <strong>位取り記数法とは？</strong>
-                    <p class="mt-2">
-                        各桁の位置によって値が決まる表記法です。例えば10進数の「123」は：<br>
-                        <code class="text-sm">1×10² + 2×10¹ + 3×10⁰ = 100 + 20 + 3 = 123</code>
+                <div class="alert alert-info mb-8">
+                    <strong>💡 位取り記数法とは？</strong>
+                    <p class="mt-2 text-gray-700 dark:text-gray-300">
+                        各桁の位置によって値が決まる表記法です。右端から左に向かって、基数の累乗が重みになります。
                     </p>
+                </div>
+
+                <!-- 位取り記数法の例 -->
+                <div class="card bg-gray-50 dark:bg-gray-800">
+                    <h3 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">📊 位取り記数法の例</h3>
+
+                    <!-- 10進数の例 -->
+                    <div class="mb-6">
+                        <h4 class="text-lg font-bold mb-3 text-gray-900 dark:text-white">例1: 10進数の場合（123₁₀）</h4>
+                        <div class="overflow-x-auto mb-4">
+                            <table class="w-full border-collapse">
+                                <thead>
+                                    <tr>
+                                        <th class="p-3 text-center text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700">桁</th>
+                                        <th class="p-3 text-center text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 font-mono">10²</th>
+                                        <th class="p-3 text-center text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 font-mono">10¹</th>
+                                        <th class="p-3 text-center text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 font-mono">10⁰</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="p-3 text-center font-semibold text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700">重み</td>
+                                        <td class="p-3 text-center text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 font-mono font-bold">100</td>
+                                        <td class="p-3 text-center text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 font-mono font-bold">10</td>
+                                        <td class="p-3 text-center text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 font-mono font-bold">1</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 text-center font-semibold text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700">値</td>
+                                        <td class="p-3 text-center border border-gray-300 dark:border-gray-600"><span class="digit-box">1</span></td>
+                                        <td class="p-3 text-center border border-gray-300 dark:border-gray-600"><span class="digit-box">2</span></td>
+                                        <td class="p-3 text-center border border-gray-300 dark:border-gray-600"><span class="digit-box">3</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="p-4 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg">
+                            <p class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">計算式：</p>
+                            <p class="text-gray-700 dark:text-gray-300 font-mono">1×100 + 2×10 + 3×1</p>
+                            <p class="text-gray-700 dark:text-gray-300 font-mono mt-1">= 100 + 20 + 3</p>
+                            <p class="text-gray-700 dark:text-gray-300 font-mono mt-1">= <strong class="text-primary text-xl">123</strong></p>
+                        </div>
+                    </div>
+
+                    <!-- 2進数の例 -->
+                    <div>
+                        <h4 class="text-lg font-bold mb-3 text-gray-900 dark:text-white">例2: 2進数の場合（1011₂）</h4>
+                        <div class="overflow-x-auto mb-4">
+                            <table class="w-full border-collapse">
+                                <thead>
+                                    <tr>
+                                        <th class="p-3 text-center text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700">桁</th>
+                                        <th class="p-3 text-center text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 font-mono">2³</th>
+                                        <th class="p-3 text-center text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 font-mono">2²</th>
+                                        <th class="p-3 text-center text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 font-mono">2¹</th>
+                                        <th class="p-3 text-center text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 font-mono">2⁰</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="p-3 text-center font-semibold text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700">重み</td>
+                                        <td class="p-3 text-center text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 font-mono font-bold">8</td>
+                                        <td class="p-3 text-center text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 font-mono font-bold">4</td>
+                                        <td class="p-3 text-center text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 font-mono font-bold">2</td>
+                                        <td class="p-3 text-center text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 font-mono font-bold">1</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="p-3 text-center font-semibold text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700">値</td>
+                                        <td class="p-3 text-center border border-gray-300 dark:border-gray-600"><span class="digit-box">1</span></td>
+                                        <td class="p-3 text-center border border-gray-300 dark:border-gray-600"><span class="digit-box">0</span></td>
+                                        <td class="p-3 text-center border border-gray-300 dark:border-gray-600"><span class="digit-box">1</span></td>
+                                        <td class="p-3 text-center border border-gray-300 dark:border-gray-600"><span class="digit-box">1</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="p-4 bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg">
+                            <p class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">計算式：</p>
+                            <p class="text-gray-700 dark:text-gray-300 font-mono">1×8 + 0×4 + 1×2 + 1×1</p>
+                            <p class="text-gray-700 dark:text-gray-300 font-mono mt-1">= 8 + 0 + 2 + 1</p>
+                            <p class="text-gray-700 dark:text-gray-300 font-mono mt-1">= <strong class="text-primary text-xl">11</strong>₁₀</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 

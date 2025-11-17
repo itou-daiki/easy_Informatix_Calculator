@@ -183,53 +183,18 @@ class BaseConverter {
                 <div class="base-box">${decimal}₁₀</div>
             `;
         } else {
-            // 割り算による変換過程
-            let steps = [];
-            let current = decimal;
-
-            if (current === 0) {
-                steps.push({ quotient: 0, remainder: 0, remainderChar: '0' });
-            } else {
-                while (current > 0) {
-                    const quotient = Math.floor(current / base);
-                    const remainder = current % base;
-                    const remainderChar = remainder < 10 ? remainder.toString() : String.fromCharCode(65 + remainder - 10);
-                    steps.push({
-                        dividend: current,
-                        quotient: quotient,
-                        remainder: remainder,
-                        remainderChar: remainderChar
-                    });
-                    current = quotient;
-                }
-            }
-
+            // ステップ2-1: 位取り記数法
             html = `
-                <p class="text-gray-700 dark:text-gray-300 mb-4">
-                    10進数を${base}で<strong>割り算</strong>を繰り返し、余りを逆順に並べます：
-                </p>
-                <div class="space-y-2 mb-4">
-                    ${steps.map((step, i) => `
-                        <div class="calculation-step">
-                            <span class="text-gray-700 dark:text-gray-300 font-mono">
-                                ${step.dividend} ÷ ${base} = ${step.quotient} 余り
-                                <span class="inline-block px-2 py-1 bg-primary text-white rounded font-bold">${step.remainderChar}</span>
-                            </span>
-                        </div>
-                    `).join('')}
-                </div>
-                <div class="p-4 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg mb-6">
-                    <p class="text-gray-700 dark:text-gray-300 font-semibold mb-2">余りを<strong>下から上</strong>に読みます：</p>
-                    <div class="flex items-center space-x-2 flex-wrap">
-                        ${steps.reverse().map(s => `<div class="digit-box">${s.remainderChar}</div>`).join('')}
-                    </div>
-                </div>
+                <div class="mb-8">
+                    <h4 class="text-lg font-bold text-gray-800 dark:text-gray-200 mb-4 pb-2 border-b-2 border-primary">
+                        ステップ2-1: 位取り記数法による変換
+                    </h4>
 
-                <!-- 結果の確認：位取り表 -->
-                <div class="mb-6">
-                    <p class="text-gray-700 dark:text-gray-300 mb-4 font-semibold">
-                        📝 結果の確認（位取り記数法）：
+                    <p class="text-gray-700 dark:text-gray-300 mb-4">
+                        ${decimal}₁₀ を ${base}進数で表すと <strong class="text-primary text-xl">${result}</strong> になります。
                     </p>
+
+                    <!-- 位取り表 -->
                     <div class="overflow-x-auto mb-4">
                         <table class="w-full border-collapse">
                             <thead>
@@ -274,7 +239,6 @@ class BaseConverter {
                             ${result.split('').map((digit, i) => {
                                 const position = result.length - 1 - i;
                                 const weight = Math.pow(base, position);
-                                const digitValue = parseInt(digit, base);
                                 return `${digit}×${weight}`;
                             }).join(' + ')}
                         </p>
@@ -287,7 +251,61 @@ class BaseConverter {
                             }).join(' + ')}
                         </p>
                         <p class="text-gray-700 dark:text-gray-300 font-mono mt-2">
-                            = <strong class="text-primary text-xl">${decimal}</strong> ✓
+                            = <strong class="text-primary text-xl">${decimal}</strong>₁₀ ✓
+                        </p>
+                    </div>
+                </div>
+
+                <!-- ステップ2-2: 別解（割り算法） -->
+                <div class="mb-6">
+                    <h4 class="text-lg font-bold text-gray-800 dark:text-gray-200 mb-4 pb-2 border-b-2 border-secondary">
+                        ステップ2-2: 別解（割り算による変換）
+                    </h4>
+
+                    <p class="text-gray-700 dark:text-gray-300 mb-4">
+                        10進数を${base}で<strong>割り算</strong>を繰り返し、余りを逆順に並べる方法もあります：
+                    </p>
+            `;
+
+            // 割り算による変換過程
+            let steps = [];
+            let current = decimal;
+
+            if (current === 0) {
+                steps.push({ quotient: 0, remainder: 0, remainderChar: '0' });
+            } else {
+                while (current > 0) {
+                    const quotient = Math.floor(current / base);
+                    const remainder = current % base;
+                    const remainderChar = remainder < 10 ? remainder.toString() : String.fromCharCode(65 + remainder - 10);
+                    steps.push({
+                        dividend: current,
+                        quotient: quotient,
+                        remainder: remainder,
+                        remainderChar: remainderChar
+                    });
+                    current = quotient;
+                }
+            }
+
+            html += `
+                    <div class="space-y-2 mb-4">
+                        ${steps.map((step, i) => `
+                            <div class="calculation-step">
+                                <span class="text-gray-700 dark:text-gray-300 font-mono">
+                                    ${step.dividend} ÷ ${base} = ${step.quotient} 余り
+                                    <span class="inline-block px-2 py-1 bg-secondary text-white rounded font-bold">${step.remainderChar}</span>
+                                </span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="p-4 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg mb-4">
+                        <p class="text-gray-700 dark:text-gray-300 font-semibold mb-2">余りを<strong>下から上</strong>に読みます：</p>
+                        <div class="flex items-center space-x-2 flex-wrap">
+                            ${steps.reverse().map(s => `<div class="digit-box">${s.remainderChar}</div>`).join('')}
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300 mt-3">
+                            → 結果: <strong class="text-secondary text-xl">${result}</strong> (${base}進数) ✓
                         </p>
                     </div>
                 </div>

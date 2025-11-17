@@ -64,16 +64,16 @@ class ShiftCalculator {
             step1Content.innerHTML = `
                 <div class="space-y-4">
                     <div class="grid grid-cols-2 gap-4">
-                        <div class="p-4 bg-blue-50 dark:bg-blue-900 dark:bg-opacity-20 rounded-lg">
+                        <div class="p-4 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg">
                             <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">10進数</p>
                             <p class="text-3xl font-bold text-gray-900 dark:text-white">${this.number}</p>
                         </div>
-                        <div class="p-4 bg-purple-50 dark:bg-purple-900 dark:bg-opacity-20 rounded-lg">
+                        <div class="p-4 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg">
                             <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">2進数（8ビット）</p>
                             <p class="text-2xl font-mono font-bold text-gray-900 dark:text-white">${NumberFormatter.toBinary(this.number, 8)}</p>
                         </div>
                     </div>
-                    <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                    <div class="p-4 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg">
                         <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">ビット位置</p>
                         <div class="flex justify-between font-mono text-lg">
                             ${[7,6,5,4,3,2,1,0].map(i => `<span class="text-gray-700 dark:text-gray-300">${i}</span>`).join('')}
@@ -103,7 +103,7 @@ class ShiftCalculator {
                             <li>• 数学的効果: <strong>${mathOperation} = ${result}</strong></li>
                         </ul>
                     </div>
-                    <div class="p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900 dark:to-purple-900 dark:bg-opacity-20 rounded-lg">
+                    <div class="p-4 bg-gray-100 dark:bg-gray-800 border-2 border-primary rounded-lg">
                         <p class="text-lg font-semibold text-center text-gray-900 dark:text-white">
                             ${this.number} ${operation} ${this.shiftAmount} = ${result}
                         </p>
@@ -185,48 +185,82 @@ class ShiftCalculator {
 
         step3Content.innerHTML = `
             <div class="space-y-6">
-                <div class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-3 text-center font-semibold">移動前</p>
-                    <div class="grid grid-cols-8 gap-2 mb-2">
-                        ${originalBits.split('').map((bit, i) => `
-                            <div class="text-center">
-                                <div class="bit-cell bit-${bit}" id="original-bit-${i}">
-                                    ${bit}
-                                </div>
-                            </div>
-                        `).join('')}
+                <!-- 移動前 -->
+                <div>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-3 font-semibold">移動前</p>
+                    <div class="overflow-x-auto mb-4">
+                        <table class="w-full border-collapse">
+                            <thead>
+                                <tr>
+                                    ${[7,6,5,4,3,2,1,0].map(i => `
+                                        <th class="p-3 text-center text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-800 font-mono text-sm">
+                                            bit${i}
+                                        </th>
+                                    `).join('')}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    ${originalBits.split('').map((bit, i) => `
+                                        <td class="p-3 text-center border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900">
+                                            <div class="text-3xl font-bold font-mono ${bit === '1' ? 'text-primary' : 'text-gray-400 dark:text-gray-600'}">
+                                                ${bit}
+                                            </div>
+                                        </td>
+                                    `).join('')}
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="grid grid-cols-8 gap-2 text-center text-xs text-gray-500 dark:text-gray-400">
-                        ${[7,6,5,4,3,2,1,0].map(i => `<div>bit${i}</div>`).join('')}
-                    </div>
-                    <p class="text-center mt-3 font-mono text-lg font-bold text-gray-900 dark:text-white">
+                    <p class="text-center font-mono text-lg font-bold text-gray-900 dark:text-white">
                         10進数: ${this.number}
                     </p>
                 </div>
 
-                <div class="flex justify-center">
-                    <div class="text-4xl animate-pulse">
+                <!-- シフト方向 -->
+                <div class="flex justify-center items-center">
+                    <div class="text-5xl animate-pulse">
                         ${this.shiftType === 'left' ? '⬅️' : '➡️'}
+                    </div>
+                    <div class="ml-4 text-xl font-bold text-gray-700 dark:text-gray-300">
+                        ${this.shiftType === 'left' ? '左シフト' : '右シフト'}
                     </div>
                 </div>
 
-                <div class="p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900 dark:to-purple-900 dark:bg-opacity-20 rounded-lg">
-                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-3 text-center font-semibold">
+                <!-- 移動後 -->
+                <div>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-3 font-semibold">
                         ${this.shiftType === 'left' ? '左シフト' : '右シフト'}後
                     </p>
-                    <div class="grid grid-cols-8 gap-2 mb-2">
-                        ${resultBits.split('').map((bit, i) => `
-                            <div class="text-center">
-                                <div class="bit-cell bit-${bit}" id="result-bit-${i}">
-                                    ${bit}
-                                </div>
-                            </div>
-                        `).join('')}
+                    <div class="overflow-x-auto mb-4">
+                        <table class="w-full border-collapse">
+                            <thead>
+                                <tr>
+                                    ${[7,6,5,4,3,2,1,0].map(i => `
+                                        <th class="p-3 text-center text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-800 font-mono text-sm">
+                                            bit${i}
+                                        </th>
+                                    `).join('')}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    ${resultBits.split('').map((bit, i) => {
+                                        const originalBit = originalBits[i];
+                                        const changed = bit !== originalBit;
+                                        return `
+                                            <td class="p-3 text-center border border-gray-300 dark:border-gray-600 ${changed ? 'bg-yellow-50 dark:bg-yellow-900 dark:bg-opacity-20' : 'bg-white dark:bg-gray-900'}">
+                                                <div class="text-3xl font-bold font-mono ${bit === '1' ? 'text-primary' : 'text-gray-400 dark:text-gray-600'}">
+                                                    ${bit}
+                                                </div>
+                                            </td>
+                                        `;
+                                    }).join('')}
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="grid grid-cols-8 gap-2 text-center text-xs text-gray-500 dark:text-gray-400">
-                        ${[7,6,5,4,3,2,1,0].map(i => `<div>bit${i}</div>`).join('')}
-                    </div>
-                    <p class="text-center mt-3 font-mono text-lg font-bold text-gray-900 dark:text-white">
+                    <p class="text-center font-mono text-lg font-bold text-gray-900 dark:text-white">
                         10進数: ${result}
                     </p>
                 </div>

@@ -518,33 +518,45 @@ class FloatingPointConverter {
         if (finalResultDiv) {
             finalResultDiv.innerHTML = `
                 <div class="space-y-4">
-                    <div class="p-6 bg-primary text-white rounded-2xl animate-fadeIn border-4 border-primary-dark shadow-xl">
-                        <p class="text-sm mb-2 opacity-90">${result.spec.name}浮動小数点数：${this.bitFormat}ビット（IEEE 754形式）</p>
-                        <p class="text-2xl font-mono font-bold break-all mb-4">
+                    <div class="p-6 bg-gray-100 dark:bg-gray-800 rounded-2xl animate-fadeIn border-4 border-primary shadow-xl">
+                        <p class="text-sm mb-4 text-gray-700 dark:text-gray-300 font-semibold">${result.spec.name}浮動小数点数：${this.bitFormat}ビット（IEEE 754形式）</p>
+
+                        <!-- ビット全体表示 -->
+                        <p class="text-2xl font-mono font-bold break-all mb-6 text-gray-900 dark:text-white">
                             ${result.finalBinary}
                         </p>
-                        <div class="grid grid-cols-3 gap-2 text-xs opacity-90">
-                            <div class="text-center">
-                                <p>符号部(1bit)</p>
-                                <p class="font-mono text-lg">${result.signBit}</p>
+
+                        <!-- 符号部・指数部・仮数部の詳細 -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <!-- 符号部 -->
+                            <div class="p-4 bg-red-50 dark:bg-red-900 dark:bg-opacity-20 border-2 border-red-300 dark:border-red-700 rounded-lg">
+                                <p class="text-sm font-semibold text-red-800 dark:text-red-300 mb-2">符号部(1bit)</p>
+                                <p class="font-mono text-3xl font-bold text-red-700 dark:text-red-400 mb-2">${result.signBit}</p>
+                                <p class="text-xs text-red-700 dark:text-red-400">${result.signBit === 0 ? '正の数' : '負の数'}</p>
                             </div>
-                            <div class="text-center">
-                                <p>指数部(${result.spec.exponentBits}bit)</p>
-                                <p class="font-mono text-lg">${result.exponentBinary}</p>
+
+                            <!-- 指数部 -->
+                            <div class="p-4 bg-blue-50 dark:bg-blue-900 dark:bg-opacity-20 border-2 border-blue-300 dark:border-blue-700 rounded-lg">
+                                <p class="text-sm font-semibold text-blue-800 dark:text-blue-300 mb-2">指数部(${result.spec.exponentBits}bit)</p>
+                                <p class="font-mono text-xl font-bold text-blue-700 dark:text-blue-400 mb-2 break-all">${result.exponentBinary}</p>
+                                <p class="text-xs text-blue-700 dark:text-blue-400">数の大きさ</p>
                             </div>
-                            <div class="text-center">
-                                <p>仮数部(${result.spec.mantissaBits}bit)</p>
-                                <p class="font-mono text-sm">${result.mantissaPadded.substring(0, 8)}...</p>
+
+                            <!-- 仮数部 -->
+                            <div class="p-4 bg-green-50 dark:bg-green-900 dark:bg-opacity-20 border-2 border-green-300 dark:border-green-700 rounded-lg">
+                                <p class="text-sm font-semibold text-green-800 dark:text-green-300 mb-2">仮数部(${result.spec.mantissaBits}bit)</p>
+                                <p class="font-mono text-sm font-bold text-green-700 dark:text-green-400 mb-2 break-all">${result.mantissaPadded.substring(0, 12)}...</p>
+                                <p class="text-xs text-green-700 dark:text-green-400">数の精度</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="p-4 bg-gray-100 dark:bg-gray-800 rounded-xl border-2 border-primary">
+                    <div class="p-4 bg-gray-100 dark:bg-gray-800 rounded-xl border-2 border-gray-300 dark:border-gray-700">
                         <h4 class="font-semibold mb-2 text-gray-900 dark:text-white">💡 各部分の意味</h4>
-                        <ul class="text-sm text-gray-700 dark:text-gray-300 space-y-1">
-                            <li>• <strong>符号部</strong>: ${result.signBit === 0 ? '正の数' : '負の数'}を表す</li>
-                            <li>• <strong>指数部</strong>: 数の大きさ（スケール）を表す</li>
-                            <li>• <strong>仮数部</strong>: 数の精度（詳細な値）を表す</li>
+                        <ul class="text-sm text-gray-700 dark:text-gray-300 space-y-2">
+                            <li>• <strong class="text-red-600 dark:text-red-400">符号部</strong>: ${result.signBit === 0 ? '正の数（0）' : '負の数（1）'}を表す</li>
+                            <li>• <strong class="text-blue-600 dark:text-blue-400">指数部</strong>: 数の大きさ（スケール）を表す - バイアス${result.spec.bias}で調整された値</li>
+                            <li>• <strong class="text-green-600 dark:text-green-400">仮数部</strong>: 数の精度（詳細な値）を表す - 正規化後の小数部分</li>
                         </ul>
                     </div>
                 </div>

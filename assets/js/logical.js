@@ -131,24 +131,55 @@ class LogicalOperations {
         valueA = valueA.padStart(len, '0');
         valueB = valueB.padStart(len, '0');
 
-        // ビット毎の計算過程を表示
-        let bitByBitHtml = '<div class="space-y-2 mb-4">';
-        for (let i = 0; i < len; i++) {
-            const bitA = valueA[i];
-            const bitB = valueB[i];
-            const bitResult = result[i];
-            bitByBitHtml += `
-                <div class="flex items-center space-x-3 p-2 bg-gray-50 dark:bg-gray-700 rounded">
-                    <span class="text-gray-700 dark:text-gray-300 text-sm">ビット${i}:</span>
-                    <div class="digit-box">${bitA}</div>
-                    <span class="text-gray-700 dark:text-gray-300 font-semibold">${opName}</span>
-                    <div class="digit-box">${bitB}</div>
-                    <span class="text-gray-700 dark:text-gray-300 font-semibold">=</span>
-                    <div class="digit-box">${bitResult}</div>
-                </div>
-            `;
-        }
-        bitByBitHtml += '</div>';
+        // ビット毎の計算過程を表形式で表示
+        let bitByBitHtml = `
+            <div class="overflow-x-auto mb-4">
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr>
+                            <th class="p-2 text-center text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-800">ビット位置</th>
+                            ${Array.from({length: len}, (_, i) => `
+                                <th class="p-2 text-center text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-800 font-mono">
+                                    ${i}
+                                </th>
+                            `).join('')}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="p-2 text-center font-semibold text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700">値A</td>
+                            ${valueA.split('').map(bit => `
+                                <td class="p-2 text-center border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900">
+                                    <div class="text-2xl font-bold font-mono ${bit === '1' ? 'text-primary' : 'text-gray-400 dark:text-gray-600'}">
+                                        ${bit}
+                                    </div>
+                                </td>
+                            `).join('')}
+                        </tr>
+                        <tr>
+                            <td class="p-2 text-center font-semibold text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700">値B</td>
+                            ${valueB.split('').map(bit => `
+                                <td class="p-2 text-center border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900">
+                                    <div class="text-2xl font-bold font-mono ${bit === '1' ? 'text-primary' : 'text-gray-400 dark:text-gray-600'}">
+                                        ${bit}
+                                    </div>
+                                </td>
+                            `).join('')}
+                        </tr>
+                        <tr>
+                            <td class="p-2 text-center font-semibold text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700">${opName}結果</td>
+                            ${result.split('').map(bit => `
+                                <td class="p-2 text-center border border-gray-300 dark:border-gray-600 bg-green-50 dark:bg-green-900 dark:bg-opacity-20">
+                                    <div class="text-2xl font-bold font-mono ${bit === '1' ? 'text-green-700 dark:text-green-400' : 'text-gray-400 dark:text-gray-600'}">
+                                        ${bit}
+                                    </div>
+                                </td>
+                            `).join('')}
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        `;
 
         const html = `
             <div class="space-y-4">
@@ -167,17 +198,17 @@ class LogicalOperations {
                 </div>
 
                 <div class="grid grid-cols-3 gap-4 text-center">
-                    <div class="p-4 bg-blue-50 dark:bg-gray-700 rounded-lg">
+                    <div class="p-4 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg">
                         <p class="text-xs text-gray-600 dark:text-gray-400 mb-1">値A</p>
                         <p class="font-mono font-bold text-gray-900 dark:text-white">${valueA}</p>
                         <p class="text-sm text-gray-600 dark:text-gray-400">(${parseInt(valueA, 2)})</p>
                     </div>
-                    <div class="p-4 bg-green-50 dark:bg-gray-700 rounded-lg">
+                    <div class="p-4 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg">
                         <p class="text-xs text-gray-600 dark:text-gray-400 mb-1">値B</p>
                         <p class="font-mono font-bold text-gray-900 dark:text-white">${valueB}</p>
                         <p class="text-sm text-gray-600 dark:text-gray-400">(${parseInt(valueB, 2)})</p>
                     </div>
-                    <div class="p-4 bg-yellow-50 dark:bg-gray-700 rounded-lg">
+                    <div class="p-4 bg-gray-100 dark:bg-gray-800 border-2 border-primary rounded-lg">
                         <p class="text-xs text-gray-600 dark:text-gray-400 mb-1">結果</p>
                         <p class="font-mono font-bold text-gray-900 dark:text-white">${result}</p>
                         <p class="text-sm text-gray-600 dark:text-gray-400">(${parseInt(result, 2)})</p>
@@ -193,20 +224,45 @@ class LogicalOperations {
     displayNotResult(value, result) {
         document.getElementById('not-result').classList.remove('hidden');
 
-        // ビット毎の計算過程を表示
-        let bitByBitHtml = '<div class="space-y-2 mb-4">';
-        for (let i = 0; i < value.length; i++) {
-            bitByBitHtml += `
-                <div class="flex items-center space-x-3 p-2 bg-gray-50 dark:bg-gray-700 rounded">
-                    <span class="text-gray-700 dark:text-gray-300 text-sm">ビット${i}:</span>
-                    <span class="text-gray-700 dark:text-gray-300 font-semibold">NOT</span>
-                    <div class="digit-box">${value[i]}</div>
-                    <span class="text-gray-700 dark:text-gray-300 font-semibold">=</span>
-                    <div class="digit-box">${result[i]}</div>
-                </div>
-            `;
-        }
-        bitByBitHtml += '</div>';
+        // ビット毎の計算過程を表形式で表示
+        let bitByBitHtml = `
+            <div class="overflow-x-auto mb-4">
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr>
+                            <th class="p-2 text-center text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-800">ビット位置</th>
+                            ${Array.from({length: value.length}, (_, i) => `
+                                <th class="p-2 text-center text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-800 font-mono">
+                                    ${i}
+                                </th>
+                            `).join('')}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="p-2 text-center font-semibold text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700">入力</td>
+                            ${value.split('').map(bit => `
+                                <td class="p-2 text-center border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900">
+                                    <div class="text-2xl font-bold font-mono ${bit === '1' ? 'text-primary' : 'text-gray-400 dark:text-gray-600'}">
+                                        ${bit}
+                                    </div>
+                                </td>
+                            `).join('')}
+                        </tr>
+                        <tr>
+                            <td class="p-2 text-center font-semibold text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700">NOT結果</td>
+                            ${result.split('').map(bit => `
+                                <td class="p-2 text-center border border-gray-300 dark:border-gray-600 bg-green-50 dark:bg-green-900 dark:bg-opacity-20">
+                                    <div class="text-2xl font-bold font-mono ${bit === '1' ? 'text-green-700 dark:text-green-400' : 'text-gray-400 dark:text-gray-600'}">
+                                        ${bit}
+                                    </div>
+                                </td>
+                            `).join('')}
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        `;
 
         const html = `
             <div class="space-y-4">
@@ -225,12 +281,12 @@ class LogicalOperations {
                 </div>
 
                 <div class="grid grid-cols-2 gap-4 text-center">
-                    <div class="p-4 bg-blue-50 dark:bg-gray-700 rounded-lg">
+                    <div class="p-4 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg">
                         <p class="text-xs text-gray-600 dark:text-gray-400 mb-1">入力</p>
                         <p class="font-mono font-bold text-gray-900 dark:text-white">${value}</p>
                         <p class="text-sm text-gray-600 dark:text-gray-400">(${parseInt(value, 2)})</p>
                     </div>
-                    <div class="p-4 bg-yellow-50 dark:bg-gray-700 rounded-lg">
+                    <div class="p-4 bg-gray-100 dark:bg-gray-800 border-2 border-primary rounded-lg">
                         <p class="text-xs text-gray-600 dark:text-gray-400 mb-1">結果</p>
                         <p class="font-mono font-bold text-gray-900 dark:text-white">${result}</p>
                         <p class="text-sm text-gray-600 dark:text-gray-400">(${parseInt(result, 2)})</p>
